@@ -10,10 +10,10 @@ select choice in "Create Database" "List Database" "Connect Database" "Drop Data
 do
     case $choice in
         "Create Database")
-            source ./create_db.sh
+            source $SCRIPT_DIR/create_db.sh
             ;;
         "List Database")
-            source ./list_db.sh
+            source $SCRIPT_DIR/list_db.sh
             ;;
         "Connect Database")
             echo "Connecting to Database..."
