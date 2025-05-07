@@ -11,10 +11,9 @@ do
     case $choice in
         "Create Database")
             source ./create_db.sh
-            # echo "Creating Database..."
             ;;
         "List Database")
-            echo "Listing Databases..."
+            source ./list_db.sh
             ;;
         "Connect Database")
             echo "Connecting to Database..."
