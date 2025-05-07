@@ -19,7 +19,7 @@ do
             echo "Connecting to Database..."
             ;;
         "Drop Database")
-            echo "Dropping Database..."
+            source $SCRIPT_DIR/drop_db.sh
             ;;
         "Exit")
             echo "Exiting..."

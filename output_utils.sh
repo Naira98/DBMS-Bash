@@ -13,7 +13,7 @@ function print_error {
 function clear_terminal {
     local path=$1
 
-    sleep 1
+    sleep 1.5
     clear
     source $path
 }
