@@ -6,10 +6,10 @@
 
 relative_file_path=${BASH_SOURCE[0]}
 suffix="/main.sh"
-SCRIPT_DIR=${path%"$suffix"}
+SCRIPT_DIR=${relative_file_path%"$suffix"}
 
 # Open utils files as sourcing
-utils=(validate_utils.sh output_utils.sh variables.sh)
+utils=(output_utils.sh validate_utils.sh variables.sh)
 for file in ${utils[@]}; do
     if [[ ! -f $SCRIPT_DIR/$file ]]; then
         print_error "Error: $file not found."
