@@ -1,14 +1,22 @@
 #! /bin/bash
-
 # To start project $ source ./main.sh
 
-work_space='DBMS'
+# Open utils files as sourcing
+utils=(validate_utils.sh output_utils.sh variables.sh)
+for file in ${utils[@]}; do
+    if [[ ! -f $file ]]; then
+        echo "Error: $file not found."
+    else
+        source ./$file
+    fi
+done
 
-if [[ ! -d $work_space ]]; then
-    mkdir ./$work_space
-    echo $work_space created successfully
+
+if [[ ! -d $WORK_SPACE ]]; then
+    mkdir ./$WORK_SPACE
+    echo $WORK_SPACE created successfully
 else
-    echo $work_space already exists. Let\'s start working on it.
+    echo $WORK_SPACE already exists. Let\'s start working on it.
 fi
 
 sleep 0.5
