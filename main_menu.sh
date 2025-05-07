@@ -10,7 +10,8 @@ select choice in "Create Database" "List Database" "Connect Database" "Drop Data
 do
     case $choice in
         "Create Database")
-            echo "Creating Database..."
+            source ./create_db.sh
+            # echo "Creating Database..."
             ;;
         "List Database")
             echo "Listing Databases..."

@@ -1,7 +1,16 @@
 #! /bin/bash
 # To start project $ source ./main.sh
 
-source ./variables.sh
+# Open utils files as sourcing
+utils=(validate_utils.sh output_utils.sh variables.sh)
+for file in ${utils[@]}; do
+    if [[ ! -f $file ]]; then
+        echo "Error: $file not found."
+    else
+        source ./$file
+    fi
+done
+
 
 if [[ ! -d $WORK_SPACE ]]; then
     mkdir ./$WORK_SPACE
