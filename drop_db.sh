@@ -1,5 +1,9 @@
 #! /bin/bash
 
+source ./output_utils.sh
+source ./validate_utils.sh
+source ./variables.sh
+
 read -rp "Enter the name of the database you want to drop: " db_name
 
 # Input Validation
@@ -8,12 +12,13 @@ status=$?
 
 if [[ $status -eq 0 ]]; then
     # Existance Validation
-    validate_dir_existance "$SCRIPT_DIR/$WORK_SPACE/$result"
+    DIR_PATH="$RUNNING_DIR/$WORK_SPACE/$result"
+    validate_dir_existance "$DIR_PATH"
     status=$?
 
     if [[ $status -eq 1 ]]; then
         #Create the database directory
-        rm -rf "$SCRIPT_DIR/$WORK_SPACE/$result"
+        rm -rf "$DIR_PATH"
         print_success "Database '$result' successfully dropped."
     else
         print_error "Database '$result' doesn't exist."
@@ -21,6 +26,3 @@ if [[ $status -eq 0 ]]; then
 else
     print_error "$result"
 fi
-
-clear_terminal "$SCRIPT_DIR/main_menu.sh"
-
