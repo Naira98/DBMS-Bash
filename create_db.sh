@@ -8,21 +8,21 @@ status=$?
 
 if [[ $status -eq 0 ]]; then
     # Existance Validation
-    validate_dir_existance "./$WORK_SPACE/$result"
+    validate_dir_existance "$SCRIPT_DIR/$WORK_SPACE/$result"
     status=$?
 
     if [[ $status -eq 0 ]]; then
         #Create the database directory
-        mkdir -p "./$WORK_SPACE/$result"
+        mkdir -p "$SCRIPT_DIR/$WORK_SPACE/$result"
         print_success "Database '$result' created successfully."
-        clear_terminal "./main_menu.sh"
+        clear_terminal "$SCRIPT_DIR/main_menu.sh"
     else
         print_error "Database '$result' already exists."
-        clear_terminal "./main_menu.sh"
+        clear_terminal "$SCRIPT_DIR/main_menu.sh"
     fi
     
 else
     print_error "$result"
-    clear_terminal "./main_menu.sh"
+    clear_terminal "$SCRIPT_DIR/main_menu.sh"
 fi
 
