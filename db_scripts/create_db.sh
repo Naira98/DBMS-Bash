@@ -1,8 +1,8 @@
 #! /bin/bash
 
-source ./output_utils.sh
-source ./validate_utils.sh
-source ./variables.sh
+source ./utils/output_utils.sh
+source ./utils/validate_utils.sh
+source ./utils/variables.sh
 
 read -rp "Enter the name of the database you want to create: " db_name
 
@@ -12,17 +12,17 @@ status=$?
 
 if [[ $status -eq 0 ]]; then
     # Existance Validation
-    DIR_PATH="$RUNNING_DIR/$WORK_SPACE/$result"
+    DIR_PATH="./$WORK_SPACE/$result"
     validate_dir_existance "$DIR_PATH"
     status=$?
 
     if [[ $status -eq 0 ]]; then
         #Create the database directory
         mkdir -p "$DIR_PATH"
-        print_success "Database '$result' created successfully."
+        print_green "Database '$result' created successfully."
     else
-        print_error "Database '$result' already exists."
+        print_red "Database '$result' already exists."
     fi
 else
-    print_error "$result"
+    print_red "$result"
 fi

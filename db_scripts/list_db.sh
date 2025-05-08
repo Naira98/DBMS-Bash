@@ -1,8 +1,8 @@
 #! /bin/bash
 
-source ./variables.sh
+source ./utils/variables.sh
 
-DBS_DIR="$RUNNING_DIR/$WORK_SPACE"
+DBS_DIR="./$WORK_SPACE"
 
 # Substitute '/' at the end of line and replace it with nothing
 dbs=$(ls -F $DBS_DIR | grep '/$' | sed 's/\/$//') 
