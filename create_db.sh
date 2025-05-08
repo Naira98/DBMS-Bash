@@ -19,10 +19,10 @@ if [[ $status -eq 0 ]]; then
     if [[ $status -eq 0 ]]; then
         #Create the database directory
         mkdir -p "$DIR_PATH"
-        print_success "Database '$result' created successfully."
+        print_green "Database '$result' created successfully."
     else
-        print_error "Database '$result' already exists."
+        print_red "Database '$result' already exists."
     fi
 else
-    print_error "$result"
+    print_red "$result"
 fi

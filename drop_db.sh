@@ -19,10 +19,10 @@ if [[ $status -eq 0 ]]; then
     if [[ $status -eq 1 ]]; then
         #Create the database directory
         rm -rf "$DIR_PATH"
-        print_success "Database '$result' successfully dropped."
+        print_green "Database '$result' successfully dropped."
     else
-        print_error "Database '$result' doesn't exist."
+        print_red "Database '$result' doesn't exist."
     fi
 else
-    print_error "$result"
+    print_red "$result"
 fi
