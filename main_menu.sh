@@ -15,18 +15,19 @@ while true; do
     do
         case $choice in
             "Create Database")
-                source $SCRIPT_DIR/create_db.sh
+                ./create_db.sh
                 clear_after_1.5_sec
                 ;;
             "List Database")
-                source $SCRIPT_DIR/list_db.sh
+                ./list_db.sh
+                sleep 1.5
                 ;;
             "Connect Database")
-                source $SCRIPT_DIR/connect_db.sh
+                ./connect_db.sh
                 clear_after_1.5_sec
                 ;;
             "Drop Database")
-                source $SCRIPT_DIR/drop_db.sh
+                ./drop_db.sh
                 clear_after_1.5_sec
                 ;;
             "Exit")
