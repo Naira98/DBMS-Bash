@@ -22,7 +22,7 @@ while true; do
                 source $SCRIPT_DIR/list_db.sh
                 ;;
             "Connect Database")
-                echo "Connecting to Database..."
+                source $SCRIPT_DIR/connect_db.sh
                 clear_after_1.5_sec
                 ;;
             "Drop Database")
