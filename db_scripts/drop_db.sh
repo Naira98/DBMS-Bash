@@ -1,8 +1,8 @@
 #! /bin/bash
 
-source ./output_utils.sh
-source ./validate_utils.sh
-source ./variables.sh
+source ./utils/output_utils.sh
+source ./utils/validate_utils.sh
+source ./utils/variables.sh
 
 read -rp "Enter the name of the database you want to drop: " db_name
 
@@ -12,7 +12,7 @@ status=$?
 
 if [[ $status -eq 0 ]]; then
     # Existance Validation
-    DIR_PATH="$RUNNING_DIR/$WORK_SPACE/$result"
+    DIR_PATH="./$WORK_SPACE/$result"
     validate_dir_existance "$DIR_PATH"
     status=$?
 

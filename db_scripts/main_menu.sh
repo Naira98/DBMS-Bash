@@ -1,6 +1,6 @@
 #! /bin/bash
 
-source ./output_utils.sh
+source ./utils/output_utils.sh
 
 PS3="Choose an option >> "
 
@@ -15,19 +15,19 @@ while true; do
     do
         case $choice in
             "Create Database")
-                ./create_db.sh
+                ./db_scripts/create_db.sh
                 clear_after_1.5_sec
                 ;;
             "List Database")
-                ./list_db.sh
+                ./db_scripts/list_db.sh
                 sleep 1.5
                 ;;
             "Connect Database")
-                ./connect_db.sh
+                ./db_scripts/connect_db.sh
                 clear_after_1.5_sec
                 ;;
             "Drop Database")
-                ./drop_db.sh
+                ./db_scripts/drop_db.sh
                 clear_after_1.5_sec
                 ;;
             "Exit")
