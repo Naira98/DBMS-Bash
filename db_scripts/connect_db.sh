@@ -19,12 +19,10 @@ if [[ $status -eq 0 ]]; then
     if [[ $status -eq 0 ]]; then
         print_red "Database '$result' doesn't exist."
     else
-        echo success $result
         print_green "Connecting to '${result}' database..."
-        sleep 1
-        # Call tables menu
-        # connected_db=$result
-        # PS3="${connected_db}_db"
+        clear_after_1.5_sec
+
+        ./table_scripts/tables_menu.sh $result
     fi
 else
     print_red "$result"
