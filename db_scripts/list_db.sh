@@ -1,6 +1,7 @@
 #! /bin/bash
 
-source ./utils/variables.sh
+set -e
+source ./utils/constants.sh
 
 DBS_DIR="./$WORK_SPACE"
 

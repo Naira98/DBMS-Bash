@@ -1,6 +1,6 @@
 #! /bin/bash
 
-source ./utils/variables.sh
+source ./utils/constants.sh
 
 function print_green {
     local message=$1
