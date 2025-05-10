@@ -4,7 +4,7 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 source ./utils/output_utils.sh
-source ./utils/variables.sh
+source ./utils/constants.sh
 
 if [[ ! -d $WORK_SPACE ]]; then
     mkdir ./$WORK_SPACE

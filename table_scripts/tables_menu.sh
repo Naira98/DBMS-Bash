@@ -1,21 +1,25 @@
 #! /bin/bash
 
-connected_db=$1
-PS3="${connected_db}_db >> "
+export CONNECTED_DB=$1
+PS3="${CONNECTED_DB}_db >> "
 
 echo
 echo "================== Tables Menu =================="
-select choice in "Create Table" "List Tables" "Queries on Table" "Back To Main Menu" "Exit"
+select choice in "Create Table" "List Tables" "Queries on Table" "Drop Table" "Back To Main Menu" "Exit"
 do
     case $choice in
         "Create Table")
             echo "Creating Table..."
+            ./table_scripts/create_table.sh
             ;;
         "List Tables")
             echo "Listing Tables..."
             ;;
         "Queries on Table")
             echo "Quering on Table..."
+            ;;
+        "Drop Table")
+            ./table_scripts/drop_table.sh
             ;;
         "Back To Main Menu")
             echo "Back To main menu..."

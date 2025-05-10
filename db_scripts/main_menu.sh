@@ -7,20 +7,20 @@ PS3="Choose an option >> "
 echo "  ===========================================================  "
 echo " || Welcome to the Our Database Management System (DBMS) 👋 || "
 echo "  ===========================================================  "
+echo
 
 while true; do
-    echo
     echo "================== Main Menu =================="
     select choice in "Create Database" "List Database" "Connect Database" "Drop Database" "Exit"
     do
         case $choice in
             "Create Database")
                 ./db_scripts/create_db.sh
-                clear_after_1.5_sec
+                # clear_after_1.5_sec
                 ;;
             "List Database")
                 ./db_scripts/list_db.sh
-                sleep 1.5
+                # sleep 1.5
                 ;;
             "Connect Database")
                 ./db_scripts/connect_db.sh
