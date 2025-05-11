@@ -25,7 +25,7 @@ COMMENT
 
 # ===============================================
 # Bash DBMS - Entry Point
-# Authors: Mohamed Abdelrabe & Naira Mokhtar
+# Authors: Mohamed Abdrabou & Naira Mokhtar
 # ===============================================
 
 # Navigate to the script's directory (ensures relative paths work correctly)
