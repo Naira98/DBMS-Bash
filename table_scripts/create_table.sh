@@ -1,8 +1,7 @@
 #! /bin/bash
 
-set -e
-
 shopt -s extglob
+set -e
 
 source ./utils/output_utils.sh
 source ./utils/validate_utils.sh
@@ -11,13 +10,13 @@ source ./utils/constants.sh
 read -rp "Enter the name of the table you want to create: " table_name
 
 # Input Validation
-table_name=$(validate_name "$table_name") 
+table_name=$(validate_name "$table_name" "Table") 
 
 # Existence Validation
 FILE_PATH="./$WORK_SPACE/$CONNECTED_DB/$table_name"
 METADATA_PATH="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
-ERROR_MESSAGE="Table '$table_name' already exists."
-validate_file_does_not_exist "$FILE_PATH" "$ERROR_MESSAGE"
+error_message="Table '$table_name' already exists."
+validate_file_does_not_exist "$FILE_PATH" "$error_message"
 
 
 

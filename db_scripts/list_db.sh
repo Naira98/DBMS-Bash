@@ -3,15 +3,16 @@
 set -e
 source ./utils/constants.sh
 
-DBS_DIR="./$WORK_SPACE"
+workspace_dir="./$WORK_SPACE"
 
 # Substitute '/' at the end of line and replace it with nothing
-dbs=$(ls -F $DBS_DIR | grep '/$' | sed 's/\/$//') 
+dbs=$(ls -F $workspace_dir | grep '/$' | sed 's/\/$//') 
 
 if [[ -z $dbs ]]; then
     echo "================== Databases =================="
-    echo "No databases found in $DBS_DIR"
+    echo "No databases found in $workspace_dir"
     echo "==============================================="
+
 else
     echo "================== Databases =================="
     for db in $dbs; do

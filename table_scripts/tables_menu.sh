@@ -3,7 +3,7 @@
 export CONNECTED_DB=$1
 PS3="${CONNECTED_DB}_db >> "
 
-echo
+# echo
 echo "================== Tables Menu =================="
 select choice in "Create Table" "List Tables" "Queries on Table" "Drop Table" "Back To Main Menu" "Exit"
 do
@@ -27,7 +27,7 @@ do
             ;;
         "Exit")
             echo "Exiting..."
-            # exit
+            exit 1
             ;;
         *)
             echo "Invalid option. Please try again."
