@@ -8,12 +8,12 @@ source ./utils/constants.sh
 read -rp "Enter the name of the database you want to drop: " db_name
 
 # Input Validation
-db_name=$(validate_name "$db_name")  # DB name or Error message
+db_name=$(validate_name "$db_name" "Database")
 
 # Existance Validation
-DIR_PATH="./$WORK_SPACE/$db_name"
-ERROR_MESSAGE="Database '$db_name' doesn't exist."
-validate_dir_exists "$DIR_PATH" "$ERROR_MESSAGE"
+db_path="./$WORK_SPACE/$db_name"
+error_message="Database '$db_name' doesn't exist."
+validate_dir_exists "$db_path" "$error_message"
 
-rm -rf "$DIR_PATH"
+rm -rf "$db_path"
 print_green "Database '$db_name' successfully dropped."

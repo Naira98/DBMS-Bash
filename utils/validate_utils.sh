@@ -5,31 +5,28 @@ source ./utils/output_utils.sh
 
 function validate_name {
     local input=$1
+    local type=$2  # Database Or Table
+
     input=$(tr ' ' '_' <<< "$input")
 
-    # Check if the database name is empty
+    # Check if the input is empty
     if [[ -z "$input" ]]; then
-        echo 'here'
-        print_red "Error: Database name cannot be empty."
+        print_red "Error: ${type} name can't be empty."
         return 1
     fi
 
-    # Check if the database name starts with a number or contains invalid characters
+    # Check if the input starts with a number or contains invalid characters
     if [[ $input =~ ^[0-9] ]]; then
-        echo 'input start with number'
-        print_red "Error: Database name cannot start with a number."
+        print_red "Error: ${type} name can't start with a number."
         return 1
     elif [[ ! $input =~ ^[a-zA-Z0-9_]+$ ]]; then
-        print_red "Error: Database name can only contain alphanumeric characters and underscores."
-        return 1
-    else
-        print_red "Error: Invalid name."
+        print_red "Error: ${type} name can only contain alphanumeric characters and underscores."
         return 1
     fi
 
-    # Check if the database name is too long
+    # Check if the input is too long
     if [[ ${#input} -gt 64 ]]; then
-        print_red "Error: Input is too long. Maximum length is 64 characters."
+        print_red "Error: ${type} name is too long. Maximum length is 64 characters."
         return 1
     fi
 

@@ -8,13 +8,13 @@ source ./utils/constants.sh
 read -rp "Enter the name of the table you want to drop: " table_name
 
 # Input Validation
-table_name=$(validate_name "$table_name")  # DB name or Error message
+table_name=$(validate_name "$table_name" "Table") 
 
 # Existence Validation
 FILE_PATH="./$WORK_SPACE/$CONNECTED_DB/$table_name"
 METADATA_PATH="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
-ERROR_MESSAGE="Table '$table_name' doesn't exist."
-validate_file_exists "$FILE_PATH" "$ERROR_MESSAGE"
+error_message="Table '$table_name' doesn't exist."
+validate_file_exists "$FILE_PATH" "$error_message"
 
 #Create the table directory
 rm "$FILE_PATH"
