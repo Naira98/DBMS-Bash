@@ -12,17 +12,17 @@ function type_writer {
 }
 
 function print_green {
-    local message=$1
+    local message=$@
     echo -e "${GREEN}$message${NC}" > /dev/stderr
 }
 
 function print_red {
-    local message=$1
+    local message=$@
     echo -e "${RED}$message${NC}" > /dev/stderr
 }
 
 function print_blue {
-    local message=$1
+    local message=$@
     echo -e "${BLUE}$message${NC}" > /dev/stderr
 }
 

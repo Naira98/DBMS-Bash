@@ -16,17 +16,17 @@ while true; do
         case $choice in
             "Create Database")
                 ./db_scripts/create_db.sh
-                clear_after_1.5_sec
+                # clear_after_1.5_sec
                 ;;
             "List Database")
                 ./db_scripts/list_db.sh
-                sleep 1
+                # sleep 1
                 ;;
             "Connect Database")
                 db_name=$(./db_scripts/connect_db.sh)
                 return_connect_db_status=$?
 
-                clear_after_1.5_sec
+                # clear_after_1.5_sec
 
                 if [[ $return_connect_db_status == 0 ]]; then
                     # Handling exit program from tables menu
@@ -40,7 +40,7 @@ while true; do
                 ;;
             "Drop Database")
                 ./db_scripts/drop_db.sh
-                clear_after_1.5_sec
+                # clear_after_1.5_sec
                 ;;
             "Exit")
                 echo "Exiting..."

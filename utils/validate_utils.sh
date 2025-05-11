@@ -5,7 +5,7 @@ source ./utils/output_utils.sh
 
 function validate_name {
     local input=$1
-    local type=$2  # Database Or Table
+    local type=$2  # Database Or Table Or Column
 
     input=$(tr ' ' '_' <<< "$input")
 

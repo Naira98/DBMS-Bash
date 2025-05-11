@@ -24,7 +24,7 @@ else
     # echo "[$(date)] Workspace already exists: $WORK_SPACE" >> logs.txt
 fi
 
-sleep 1
+# sleep 1
 
 # Main Menu
 ./db_scripts/main_menu.sh
