@@ -17,7 +17,7 @@ clear
 
 if [[ ! -d $WORK_SPACE ]]; then
     mkdir -p ./$WORK_SPACE
-    print_blue "Your wrokspace '$WORK_SPACE' created successfully."
+    print_blue "Your workspace '$WORK_SPACE' created successfully."
     # echo "[$(date)] Workspace created: $WORK_SPACE" >> logs.txt
 else
     print_blue "Your workspace '$WORK_SPACE' already exists. Let's start working on it."
