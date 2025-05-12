@@ -12,7 +12,7 @@ do
             ./table_scripts/create_table.sh
             ;;
         "List Tables")
-            echo "Listing Tables..."
+            ./table_scripts/list_tables.sh
             ;;
         "Queries on Table")
             echo "Quering on Table..."
