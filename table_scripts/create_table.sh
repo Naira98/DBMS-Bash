@@ -35,25 +35,27 @@ touch "$table_metadata_path"
 
 for (( i = 1; i <= "$cols_num"; i++ )); do
 
-    col_name=$(ask_for_col_name "$table_metadata_path" "$i")
-    data_type=$(ask_for_data_type "$col_name")
+    col_name=$(ask_for_col_name "$table_metadata_path" "$i" || delete_table_and_abort "$table_path" "$table_metadata_path")
 
-    meta_row="$col_name":"$data_type":
+    data_type=$(ask_for_data_type "$col_name" || delete_table_and_abort "$table_path" "$table_metadata_path")
+
+    col_metadata="$col_name":"$data_type":
     if (( $i == 1 )); then
-        meta_row="$meta_row"pk:unique:not_null:
-        echo $meta_row
+        col_metadata="$col_metadata"pk:unique:not_null:
     else
-        constraints=$(ask_for_chosen_constraints $col_name $data_type)
-        meta_row="$meta_row""$constraints"
+        constraints=$(ask_for_chosen_constraints $col_name $data_type || delete_table_and_abort "$table_path" "$table_metadata_path")
+        
+        col_metadata="$col_metadata""$constraints"
     fi
 
 
-    echo $meta_row >> $table_metadata_path
+    echo $col_metadata >> $table_metadata_path
 
 done
 
-
-
+# check input errors
+# catch any error and remove files
+# or print create table successfully
 
 
 #Create the table directory

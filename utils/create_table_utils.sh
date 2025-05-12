@@ -15,11 +15,11 @@ function ask_for_col_name {
     fi
 
     read -rp "Enter name of column $col_num: " col_name
-    col_name=$(validate_name "$col_name" "Column")
+    col_name=$(validate_name "$col_name" "Column") || return $?
 
     col_names=$(awk -F : '{print $1}' $table_metadata_path)
 
-    if echo "$col_names" | grep -qwq "$col_name"; then
+    if echo "$col_names" | grep -qw "$col_name"; then
         print_red "Error: Column name '$col_name' already exists"
         return 1
     fi
@@ -55,15 +55,16 @@ function ask_for_chosen_constraints {
     local chosen_constraints=":::"
 
     while true; do
-        unique_marker=$(awk -F: '{if ($2 == "unique") print "*"; else " "}' <<< $chosen_constraints)
-        not_null_marker=$(awk -F: '{if ($3 == "not_null") print "*"; else " "}' <<< $chosen_constraints)
-        default_marker=$(awk -F: '{if ($4 != "") print "*"; else " "}' <<< $chosen_constraints)
+        unique_marker=$(awk -F: '{if ($2 == "unique") print "*"; else print " "}' <<< $chosen_constraints)
+        not_null_marker=$(awk -F: '{if ($3 == "not_null") print "*"; else print " "}' <<< $chosen_constraints)
+        default_marker=$(awk -F: '{if ($4 != "") print "*"; else print " "}' <<< $chosen_constraints)
 
         select constraint in "[$unique_marker] unique" "[$not_null_marker] not null" "[$default_marker] default" "Done"; do
             case $REPLY in
                 1) #unique
                     if [[ $chosen_constraints == *:unique:* ]]; then
                         chosen_constraints=${chosen_constraints/:unique:/::}
+
                     else
                         chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                     fi
@@ -82,10 +83,16 @@ function ask_for_chosen_constraints {
                         read -rp "Enter a default value for $col_name: " default_value
 
                         validate_data_type $default_value $data_type
-                        validate_no_colon_or_newlines $default_value
-                        
+                        first_validation=$?
 
-                        chosen_constraints=$(awk -F: -v default_value="$default_value" '{$4=default_value; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                        validate_no_colon_or_newlines $default_value
+                        second_validation=$?
+
+                        echo $first_validation $second_validation
+                        
+                        if [[ $first_validation = 0 && $second_validation = 0 ]]; then
+                            chosen_constraints=$(awk -F: -v default_value="$default_value" '{$4=default_value; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                        fi
                     else
                         chosen_constraints=$(awk -F: '{$4=""; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                     fi
@@ -96,10 +103,21 @@ function ask_for_chosen_constraints {
                     return 0
                 ;;
 
+                *)
+                    print_red "Invalid input. please try again"
             esac
-            echo $chosen_constraints
             break
         done
     done
+}
+
+function delete_table_and_abort {
+    echo in delete table and abort
+    local table_path=$1
+    local table_metadata_path=$2
+
+    rm -f "$table_path" "$table_metadata_path"
+
+    return 1
 }
 
