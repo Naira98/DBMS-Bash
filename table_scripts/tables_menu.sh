@@ -9,7 +9,6 @@ select choice in "Create Table" "List Tables" "Queries on Table" "Drop Table" "B
 do
     case $choice in
         "Create Table")
-            echo "Creating Table..."
             ./table_scripts/create_table.sh
             ;;
         "List Tables")
