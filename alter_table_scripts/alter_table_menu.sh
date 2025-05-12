@@ -19,7 +19,7 @@ while true; do
             ./alter_table_scripts/add_column.sh $table_name $table_data_path $table_metadata_path
             ;;
             "Rename Column")
-            ./alter_table_scripts/rename_column.sh
+            ./alter_table_scripts/rename_column.sh $table_name $table_metadata_path
             ;;
             "Drop Column")
             ./alter_table_scripts/drop_column.sh

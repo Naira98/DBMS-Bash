@@ -6,7 +6,8 @@ source ./utils/output_utils.sh
 
 function ask_for_col_name {
     local table_metadata_path=$1
-    local col_num=$2
+    local prompt=$2
+    local col_num=$3
 
     if (( $col_num == 1 )); then
         echo "========================================" > /dev/stderr
@@ -14,7 +15,7 @@ function ask_for_col_name {
         echo "========================================" > /dev/stderr
     fi
 
-    read -rp "Enter name of column $col_num: " col_name
+    read -rp "$prompt" col_name
     col_name=$(validate_name "$col_name" "Column") || return $?
 
     col_names=$(awk -F : '{print $1}' $table_metadata_path)

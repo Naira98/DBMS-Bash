@@ -10,7 +10,7 @@ table_name=$1
 table_data_path=$2
 table_metadata_path=$3
 
-col_name=$(ask_for_col_name "$table_metadata_path" "new")
+col_name=$(ask_for_col_name "$table_metadata_path" "Enter the name of new column: " "-1")
 
 data_type=$(ask_for_data_type "$col_name")
     
