@@ -12,7 +12,7 @@ function select_from_tables {
         return 1
     fi
 
-    select choosen_table in "${tables[@]}"; do
+    select chosen_table in "${tables[@]}"; do
         if [[ -n $chosen_table ]]; then
             echo $chosen_table
             return 0
