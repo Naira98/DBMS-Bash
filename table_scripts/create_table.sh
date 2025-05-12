@@ -53,10 +53,4 @@ for (( i = 1; i <= "$cols_num"; i++ )); do
 
 done
 
-# check input errors
-# catch any error and remove files
-# or print create table successfully
-
-
-#Create the table directory
-# print_green "Table '$table_name' created successfully."
+print_green "Table '$table_name' created successfully."
