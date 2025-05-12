@@ -46,7 +46,7 @@ function ask_for_data_type {
     return 0
 }
 
-function ask_for_chosen_constraints {
+function ask_for_all_constraints {
     PS3="Select column constraints one at a time >> "
 
     local col_name=$1
@@ -87,8 +87,6 @@ function ask_for_chosen_constraints {
 
                         validate_no_colon_or_newlines $default_value
                         second_validation=$?
-
-                        echo $first_validation $second_validation
                         
                         if [[ $first_validation = 0 && $second_validation = 0 ]]; then
                             chosen_constraints=$(awk -F: -v default_value="$default_value" '{$4=default_value; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)

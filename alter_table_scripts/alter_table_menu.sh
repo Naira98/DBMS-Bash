@@ -10,13 +10,13 @@ PS3="Choose an option >> "
 
 while true; do
     echo "============== Alter Table $table_name =============="
-    select option in "Rename Table" "Add Column" "Rename Column" "Drop Column" "Add Constraint" "Drop Constraint" "Back to Tables Menu"; do
+    select option in "Rename Table" "Add Column" "Rename Column" "Drop Column" "Add Or Drop Constraint" "Back to Tables Menu"; do
         case $option in
             "Rename Table")
             ./alter_table_scripts/rename_table.sh $table_name $table_data_path $table_metadata_path
             ;;
             "Add Column")
-            ./alter_table_scripts/add_column.sh
+            ./alter_table_scripts/add_column.sh $table_name $table_data_path $table_metadata_path
             ;;
             "Rename Column")
             ./alter_table_scripts/rename_column.sh
@@ -24,11 +24,8 @@ while true; do
             "Drop Column")
             ./alter_table_scripts/drop_column.sh
             ;;
-            "Add Constraint")
-            ./alter_table_scripts/add_constraint.sh
-            ;;
-            "Drop Constraint")
-            ./alter_table_scripts/drop_constraint.sh
+            "Add Or Drop Constraint")
+            ./alter_table_scripts/add_drop_constraint.sh
             ;;
             "Back to Tables Menu")
             exit 0

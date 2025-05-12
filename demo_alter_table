@@ -1,0 +1,167 @@
+
+while true; do
+    echo
+    echo "============ Alter Table '$table_name' ============"
+    select option in "Rename Table" "Modify Columns" "Back to Tables Menu" "Exit"; do
+        case $option in
+            "Rename Table")
+                read -rp "Enter the new name for the table: " new_name
+                new_name=$(validate_name "$new_name" "Table")
+
+                NEW_TABLE_PATH="./$WORK_SPACE/$CONNECTED_DB/$new_name.data"
+                NEW_META_PATH="./$WORK_SPACE/$CONNECTED_DB/$new_name.meta"
+
+                # Ensure the new table name doesn't already exist
+                validate_file_does_not_exist "$NEW_TABLE_PATH" "Table '$new_name' already exists."
+
+                mv "$TABLE_PATH" "$NEW_TABLE_PATH"
+                mv "$META_PATH" "$NEW_META_PATH"
+                print_green "Table renamed successfully to '$new_name'."
+
+                # Update file paths and table name
+                TABLE_PATH="$NEW_TABLE_PATH"
+                META_PATH="$NEW_META_PATH"
+                table_name="$new_name"
+                break
+                ;;
+
+            "Modify Columns")
+                echo
+                echo "======== Column Modification Options ========"
+                select col_option in "Add Column" "Remove Column" "Rename Column" "Column Constraints" "Back"; do
+                    case $col_option in
+                        "Add Column")
+                            read -rp "Enter new column name: " new_col
+                            new_col=$(validate_name "$new_col" "Column")
+                            read -rp "Enter data type (int | str | bool): " dtype
+
+                            echo "$new_col:$dtype:none" >> "$META_PATH"
+                            awk -v OFS=":" '{ print $0, "NULL" }' "$TABLE_PATH" > "${TABLE_PATH}.tmp" && mv "${TABLE_PATH}.tmp" "$TABLE_PATH"
+                            print_green "Column '$new_col' added successfully."
+                            break
+                            ;;
+
+                        "Remove Column")
+                            echo "Existing columns:"
+                            awk -F: '{ print NR ") " $1 }' "$META_PATH"
+                            read -rp "Enter the column number to remove: " col_num
+                            total_cols=$(wc -l < "$META_PATH")
+
+                            if [[ $col_num -lt 1 || $col_num -gt $total_cols ]]; then
+                                print_red "Invalid column number."
+                                break
+                            fi
+
+                            sed -i "${col_num}d" "$META_PATH"
+                            cut --complement -d: -f"$col_num" "$TABLE_PATH" > "${TABLE_PATH}.tmp" && mv "${TABLE_PATH}.tmp" "$TABLE_PATH"
+                            print_green "Column removed successfully."
+                            break
+                            ;;
+
+                        "Rename Column")
+                            awk -F: '{ print NR ") " $1 }' "$META_PATH"
+                            read -rp "Enter column number to rename: " col_num
+                            read -rp "Enter new column name: " new_col
+                            new_col=$(validate_name "$new_col" "Column")
+
+                            awk -v col="$col_num" -v new="$new_col" -F: -v OFS=":" \
+                                '{ if (NR==col) $1=new; print }' "$META_PATH" > "${META_PATH}.tmp" && mv "${META_PATH}.tmp" "$META_PATH"
+                            print_green "Column renamed successfully."
+                            break
+                            ;;
+
+                        "Column Constraints")
+                            echo "======= Constraint Options ======="
+                            select constr_opt in "Add Constraint" "Remove Constraint" "Change Constraint" "Back" "Exit"; do
+                                case $constr_opt in
+                                    "Add Constraint")
+                                        awk -F: '{ print NR ") " $1 " [" $3 "]" }' "$META_PATH"
+                                        read -rp "Enter column number to add constraint: " col_num
+                                        read -rp "Enter constraint (pk | unique | not_null): " constraint
+
+                                        # Ensure only one primary key exists
+                                        if [[ $constraint == "pk" ]]; then
+                                            if grep -q ":.*:pk" "$META_PATH"; then
+                                                print_red "A primary key already exists."
+                                                break
+                                            fi
+                                        fi
+
+                                        # Update metadata with constraint
+                                        awk -v col="$col_num" -v constr="$constraint" -F: -v OFS=":" \
+                                            '{ if (NR==col) $3=constr; print }' "$META_PATH" > "${META_PATH}.tmp" && mv "${META_PATH}.tmp" "$META_PATH"
+                                        print_green "Constraint '$constraint' added successfully."
+                                        break
+                                        ;;
+
+                                    "Remove Constraint")
+                                        awk -F: '{ print NR ") " $1 " [" $3 "]" }' "$META_PATH"
+                                        read -rp "Enter column number to remove constraint: " col_num
+                                        awk -v col="$col_num" -F: -v OFS=":" \
+                                            '{ if (NR==col) $3="none"; print }' "$META_PATH" > "${META_PATH}.tmp" && mv "${META_PATH}.tmp" "$META_PATH"
+                                        print_green "Constraint removed successfully."
+                                        break
+                                        ;;
+
+                                    "Change Constraint")
+                                        awk -F: '{ print NR ") " $1 " [" $3 "]" }' "$META_PATH"
+                                        read -rp "Enter column number to change constraint: " col_num
+                                        read -rp "Enter new constraint (pk | unique | not_null): " new_constraint
+
+                                        # Ensure only one pk exists
+                                        if [[ $new_constraint == "pk" ]]; then
+                                            if grep -q ":.*:pk" "$META_PATH"; then
+                                                print_red "A primary key already exists."
+                                                break
+                                            fi
+                                        fi
+
+                                        awk -v col="$col_num" -v constr="$new_constraint" -F: -v OFS=":" \
+                                            '{ if (NR==col) $3=constr; print }' "$META_PATH" > "${META_PATH}.tmp" && mv "${META_PATH}.tmp" "$META_PATH"
+                                        print_green "Constraint changed successfully."
+                                        break
+                                        ;;
+
+                                    "Back")
+                                        break
+                                        ;;
+                                    "Exit")
+                                        exit 0
+                                        ;;
+                                    *)
+                                        print_red "Invalid choice."
+                                        ;;
+                                esac
+                            done
+                            break
+                            ;;
+
+                        "Back")
+                            break
+                            ;;
+                        *)
+                            print_red "Invalid choice."
+                            ;;
+                    esac
+                done
+                break
+                ;;
+
+            "Back to Tables Menu")
+                ./table_scripts/tables_menu.sh "$CONNECTED_DB"
+                exit
+                ;;
+
+            "Exit")
+                echo "Exiting update..."
+                exit 0
+                ;;
+
+            *)
+                print_red "Invalid option. Please try again."
+                ;;
+        esac
+    done
+
+    # Loop again
+done
