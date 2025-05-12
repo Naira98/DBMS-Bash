@@ -15,7 +15,7 @@ while true; do
                 ./table_scripts/list_tables.sh
                 ;;
             "Queries on Table")
-                echo "Quering on Table..."
+                ./table_scripts/queries_on_table.sh
                 ;;
             "Alter Table")
                 ./alter_table_scripts/alter_table_menu.sh || exit 0
