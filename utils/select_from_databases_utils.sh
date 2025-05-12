@@ -15,7 +15,6 @@ function select_from_databases {
     fi
 
     select chosen_db in "${dbs[@]}"; do
-        echo $chosen_db > /dev/stderr
         if [[ -n $chosen_db ]]; then
             echo $chosen_db
             return 0

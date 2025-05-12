@@ -5,7 +5,7 @@ PS3="${CONNECTED_DB}_db >> "
 
 while true; do
     echo "================== Tables Menu =================="
-    select choice in "Create Table" "List Tables" "Queries on Table" "Drop Table" "Back To Main Menu" "Exit"
+    select choice in "Create Table" "List Tables" "Queries on Table" "Alter Table" "Drop Table" "Back To Main Menu" "Exit"
     do
         case $choice in
             "Create Table")
@@ -16,6 +16,9 @@ while true; do
                 ;;
             "Queries on Table")
                 echo "Quering on Table..."
+                ;;
+            "Alter Table")
+                ./alter_table_scripts/alter_table_menu.sh || exit 0
                 ;;
             "Drop Table")
                 ./table_scripts/drop_table.sh

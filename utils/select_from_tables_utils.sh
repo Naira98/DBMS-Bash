@@ -1,5 +1,8 @@
 #! /bin/bash
 
+source ./utils/output_utils.sh
+source ./utils/constants.sh
+
 function select_from_tables {
     local reason=$1
 

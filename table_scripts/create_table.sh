@@ -35,7 +35,7 @@ touch "$table_metadata_path"
 
 for (( i = 1; i <= "$cols_num"; i++ )); do
 
-    col_name=$(ask_for_col_name "$table_metadata_path" "$i" || delete_table_and_abort "$table_path" "$table_metadata_path")
+    col_name=$(ask_for_col_name "$table_metadata_path" "Enter name of column $i: " "$i" || delete_table_and_abort "$table_path" "$table_metadata_path")
 
     data_type=$(ask_for_data_type "$col_name" || delete_table_and_abort "$table_path" "$table_metadata_path")
 
@@ -43,13 +43,12 @@ for (( i = 1; i <= "$cols_num"; i++ )); do
     if (( $i == 1 )); then
         col_metadata="$col_metadata"pk:unique:not_null:
     else
-        constraints=$(ask_for_chosen_constraints $col_name $data_type || delete_table_and_abort "$table_path" "$table_metadata_path")
+        constraints=$(ask_for_all_constraints $col_name $data_type "" "" "" || delete_table_and_abort "$table_path" "$table_metadata_path")
         
         col_metadata="$col_metadata""$constraints"
     fi
 
-
-    echo $col_metadata >> $table_metadata_path
+    echo "$col_metadata" >> "$table_metadata_path"
 
 done
 
