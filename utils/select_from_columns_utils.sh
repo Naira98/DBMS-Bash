@@ -13,7 +13,7 @@ function select_from_columns {
 
     select chosen_col in ${columns[@]}; do
         if [[ -n $chosen_col ]]; then
-            echo $REPLY $chosen_col
+            echo $chosen_col $REPLY 
             echo 
             return 0
         else

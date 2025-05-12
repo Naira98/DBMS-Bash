@@ -11,8 +11,8 @@ source ./utils/create_table_utils.sh
 source ./utils/output_utils.sh
 
 col_name_number="$(select_from_columns "drop" "$table_metadata_path")"
-col_num="$(awk -F' ' '{print $1}'  <<< $col_name_number)"
-col_name="$(awk -F' ' '{print $2}'  <<< $col_name_number)"
+col_name="$(awk -F' ' '{print $1}'  <<< $col_name_number)"
+col_num="$(awk -F' ' '{print $2}'  <<< $col_name_number)"
 
 if [[ $col_num = 1 ]]; then
     print_red "Error: Primary key column '$col_name' can't be deleted"

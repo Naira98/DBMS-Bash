@@ -25,7 +25,7 @@ while true; do
             ./alter_table_scripts/drop_column.sh $table_name $table_data_path $table_metadata_path
             ;;
             "Add Or Drop Constraint")
-            ./alter_table_scripts/add_drop_constraint.sh
+            ./alter_table_scripts/add_drop_constraint.sh $table_name $table_data_path $table_metadata_path
             ;;
             "Back to Tables Menu")
             exit 0

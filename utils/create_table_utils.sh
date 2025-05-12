@@ -1,6 +1,7 @@
 #! /bin/bash
 
 source ./utils/validate_utils.sh
+source ./utils/validate_constraints_utils.sh
 source ./utils/validate_table_data_utils.sh
 source ./utils/output_utils.sh
 
@@ -52,8 +53,16 @@ function ask_for_all_constraints {
 
     local col_name=$1
     local data_type=$2
+    local old_constraints=$3
+    local table_data_path=$4
+    local col_num=$5
+
     # pk:unique:not_null:default
-    local chosen_constraints=":::"
+    if [[ -n $old_constraints ]]; then
+        local chosen_constraints=$old_constraints
+    else
+        local chosen_constraints=":::"
+    fi
 
     while true; do
         unique_marker=$(awk -F: '{if ($2 == "unique") print "*"; else print " "}' <<< $chosen_constraints)
@@ -64,33 +73,58 @@ function ask_for_all_constraints {
             case $REPLY in
                 1) #unique
                     if [[ $chosen_constraints == *:unique:* ]]; then
-                        chosen_constraints=${chosen_constraints/:unique:/::}
-
+                        if [[ $col_num -eq 1 ]]; then
+                            print_red "Error: You can't delete unique constraint from primary key '$col_name'."
+                        else
+                            chosen_constraints=${chosen_constraints/:unique:/::}
+                        fi
                     else
+                        if [[ -n $old_constraints ]]; then
+                            function handle_error {
+                                print_red "Error: There are duplicate values in column $col_num."
+                            }
+
+                            validate_stored_data_are_unique "$col_num" "$table_data_path" || handle_error
+                        fi
                         chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                     fi
                 ;;
 
                 2) #not_null
                     if [[ $chosen_constraints == *:not_null:* ]]; then
-                        chosen_constraints=${chosen_constraints/:not_null:/::}
+                        if [[ $col_num -eq 1 ]]; then
+                            print_red "Error: You can't delete not null constraint from primary key '$col_name'."
+                        else
+                            chosen_constraints=${chosen_constraints/:not_null:/::}
+                        fi
                     else
+                        if [[ -n $old_constraints ]]; then
+                            validate_stored_data_have_no_null_values "$col_num" "$table_data_path"
+                            if [[ $? -ne 0 ]]; then
+                                print_red "Error: Invalid not null constraint. There are duplicate values in column $col_name ."
+                                return 1
+                            fi
+                        fi
                         chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                     fi
                 ;;
 
                 3) #default
                     if [[ $chosen_constraints =~ :$ ]]; then
-                        read -rp "Enter a default value for $col_name: " default_value
+                        if [[ $col_num -eq 1 ]]; then
+                            print_red "Error: You can't add default value for the primary key '$col_name'."
+                        else
+                            read -rp "Enter a default value for $col_name: " default_value
 
-                        validate_data_type $default_value $data_type
-                        first_validation=$?
+                            validate_data_type $default_value $data_type
+                            first_validation=$?
 
-                        validate_no_colon_or_newlines $default_value
-                        second_validation=$?
-                        
-                        if [[ $first_validation = 0 && $second_validation = 0 ]]; then
-                            chosen_constraints=$(awk -F: -v default_value="$default_value" '{$4=default_value; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                            validate_no_colon_or_newlines $default_value
+                            second_validation=$?
+                            
+                            if [[ $first_validation = 0 && $second_validation = 0 ]]; then
+                                chosen_constraints=$(awk -F: -v default_value="$default_value" '{$4=default_value; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                            fi
                         fi
                     else
                         chosen_constraints=$(awk -F: '{$4=""; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
