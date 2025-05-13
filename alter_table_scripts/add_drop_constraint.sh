@@ -4,8 +4,6 @@ set -e
 
 source ./utils/select_from_columns_utils.sh
 source ./utils/create_table_utils.sh
-# source ./utils/alter_table_utils.sh
-# source ./utils/output_utils.sh
 
 table_name=$1
 table_data_path=$2

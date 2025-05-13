@@ -11,10 +11,10 @@ source ./utils/constants.sh
 read -rp "Enter the name of the table you want to create: " table_name
 
 # Input Validation
-table_name=$(validate_name "$table_name" "Table") 
+table_name=$(validate_name "$table_name" "Table")
 
 # Existence Validation
-table_path="./$WORK_SPACE/$CONNECTED_DB/$table_name"
+table_path="./$WORK_SPACE/$CONNECTED_DB/$table_name" 
 table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
 error_message="Table '$table_name' already exists."
 validate_file_does_not_exist "$table_path" "$error_message"

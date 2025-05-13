@@ -22,12 +22,10 @@ new_table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$new_name"
 error_message="Table '$new_name' already exists."
 validate_file_does_not_exist "$new_name" "$error_message"
 
-# echo "$old_table_data_path"
-# echo "$new_table_data_path"
-# echo "$old_table_metadata_path"
-# echo "$new_table_metadata_path"
-
 mv "$old_table_data_path" "$new_table_data_path"
 mv "$old_table_metadata_path" "$new_table_metadata_path"
+
+                # table_name="$new_name"
+
 
 print_green "Table renamed successfully to '$new_name'."

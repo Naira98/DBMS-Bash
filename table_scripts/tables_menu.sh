@@ -3,6 +3,8 @@
 export CONNECTED_DB=$1
 PS3="${CONNECTED_DB}_db >> "
 
+source ./utils/output_utils.sh
+
 while true; do
     echo "================== Tables Menu =================="
     select choice in "Create Table" "List Tables" "Queries on Table" "Alter Table" "Drop Table" "Back To Main Menu" "Exit"
@@ -18,7 +20,7 @@ while true; do
                 ./table_scripts/queries_on_table.sh
                 ;;
             "Alter Table")
-                ./alter_table_scripts/alter_table_menu.sh || exit 0
+                ./alter_table_scripts/alter_table_menu.sh 
                 ;;
             "Drop Table")
                 ./table_scripts/drop_table.sh
@@ -31,7 +33,7 @@ while true; do
                 exit 1
                 ;;
             *)
-                echo "Invalid option. Please try again."
+                print_red "Invalid option. Please try again."
                 ;;
         esac
         break

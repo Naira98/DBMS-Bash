@@ -68,7 +68,7 @@ function ask_for_all_constraints {
         unique_marker=$(awk -F: '{if ($2 == "unique") print "*"; else print " "}' <<< $chosen_constraints)
         not_null_marker=$(awk -F: '{if ($3 == "not_null") print "*"; else print " "}' <<< $chosen_constraints)
         default_marker=$(awk -F: '{if ($4 != "") print "*"; else print " "}' <<< $chosen_constraints)
-
+        
         select constraint in "[$unique_marker] unique" "[$not_null_marker] not null" "[$default_marker] default" "Done"; do
             case $REPLY in
                 1) #unique
@@ -117,12 +117,8 @@ function ask_for_all_constraints {
                             read -rp "Enter a default value for $col_name: " default_value
 
                             validate_data_type $default_value $data_type
-                            first_validation=$?
 
-                            validate_no_colon_or_newlines $default_value
-                            second_validation=$?
-                            
-                            if [[ $first_validation = 0 && $second_validation = 0 ]]; then
+                            if [[ $? -eq 0 ]]; then
                                 chosen_constraints=$(awk -F: -v default_value="$default_value" '{$4=default_value; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                             fi
                         fi

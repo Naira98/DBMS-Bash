@@ -1,13 +1,13 @@
 #! /bin/bash
 
+source ./utils/constants.sh
+
 function select_from_databases {
     local reason=$1
 
     PS3="Select database to $reason >> "
 
     dbs=($(ls -F ./$WORK_SPACE | grep '/$' | sed 's/\/$//'))
-
-    # echo ${dbs[@]} > /dev/stderr
 
     if [[ ${#dbs[@]} -eq 0 ]]; then
         print_red "There's no databases to $reason"
