@@ -1,6 +1,9 @@
 #! /bin/bash
 
-source ./utils/constants.sh
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+BLUE="\033[0;34m"
+NC="\033[0m" # No Color
 
 function type_writer {
     local message="$1"
@@ -26,7 +29,7 @@ function print_blue {
     echo -e "${BLUE}$message${NC}" > /dev/stderr
 }
 
-function clear_after_1.5_sec {
-    sleep 1.5
-    clear
-}
+# function clear_after_1.5_sec {
+#     sleep 1.5
+#     clear
+# }

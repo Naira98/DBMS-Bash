@@ -34,17 +34,17 @@ function validate_name {
     return 0
 }
 
-function validate_dir_exists {
-    local dir_path=$1
-    local error_message=$2
+# function validate_dir_exists {
+#     local dir_path=$1
+#     local error_message=$2
 
-    # Check if the dir already exists
-    if [[ ! -d "$dir_path" ]]; then
-        print_red "$error_message"
-        return 1
-    fi
-    return 0
-}
+#     # Check if the dir already exists
+#     if [[ ! -d "$dir_path" ]]; then
+#         print_red "$error_message"
+#         return 1
+#     fi
+#     return 0
+# }
 
 function validate_dir_does_not_exist {
     local dir_path=$1

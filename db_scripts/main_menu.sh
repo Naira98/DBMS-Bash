@@ -1,6 +1,7 @@
 #! /bin/bash
 
 source ./utils/output_utils.sh
+source ./utils/confirm_exit_utils.sh
 
 PS3="Choose an option >> "
 
@@ -15,27 +16,18 @@ while true; do
     do
         case $choice in
             "Create Database")
-                ./db_scripts/create_db.sh
-                # clear_after_1.5_sec
+                ./db_scripts/create_db.sh || echo
                 ;;
             "List Database")
                 ./db_scripts/list_db.sh
-                # sleep 1
                 ;;
             "Connect Database")
                 db_name=$(./db_scripts/connect_db.sh)
                 return_connect_db_status=$?
 
-                # clear_after_1.5_sec
-
                 if [[ $return_connect_db_status == 0 ]]; then
                     # Handling exit program from tables menu
                     ./table_scripts/tables_menu.sh "$db_name" || exit 0
-
-                    # Exit with status 1
-                    # set -e
-                    # ./table_scripts/tables_menu.sh "$db_name"
-                    # set +e
                 fi
                 ;;
             "Drop Database")
@@ -43,11 +35,10 @@ while true; do
                 # clear_after_1.5_sec
                 ;;
             "Exit")
-                echo "Exiting..."
-                exit
+                exit_confirmation
                 ;;
             *)
-                echo "Invalid option. Please try again."
+                print_red "Invalid option. Please try again."
                 ;;
         esac
         

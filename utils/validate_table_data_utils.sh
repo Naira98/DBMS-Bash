@@ -16,8 +16,8 @@ function validate_data_type {
             fi
             ;;
         "varchar")
-            if [[ "$input" =~ '[^a-zA-Z0-9_ ]' ]]; then
-                print_red "Error: Default value must be alphanumeric."
+            if [[ "$input" =~ : || "$input" =~ $'\n' ]]; then
+                print_red "Error: Default value can't contain ':' or newlines."
                 return 1
             fi
             ;;
@@ -33,13 +33,4 @@ function validate_data_type {
             ;;
     esac
     return 0
-}
-
-function validate_no_colon_or_newlines {
-    local input=$1
-
-    if [[ "$input" =~ : || "$input" =~ $'\n' ]]; then
-        print_red "Error: Default value cannot contain ':' or newlines."
-        return 1
-    fi
 }
