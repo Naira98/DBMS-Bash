@@ -11,22 +11,22 @@ function validate_name {
 
     # Check if the input is empty
     if [[ -z "$input" ]]; then
-        print_red "Error: ${type} name can't be empty."
+        print_red "Error: ${type} name can't be empty. Please try again"
         return 1
     fi
 
     # Check if the input starts with a number or contains invalid characters
     if [[ $input =~ ^[0-9] ]]; then
-        print_red "Error: ${type} name can't start with a number."
+        print_red "Error: ${type} name can't start with a number. Please try again"
         return 1
     elif [[ ! $input =~ ^[a-zA-Z0-9_]+$ ]]; then
-        print_red "Error: ${type} name can only contain alphanumeric characters and underscores."
+        print_red "Error: ${type} name can only contain alphanumeric characters and underscores. Please try again"
         return 1
     fi
 
     # Check if the input is too long
     if [[ ${#input} -gt 64 ]]; then
-        print_red "Error: ${type} name is too long. Maximum length is 64 characters."
+        print_red "Error: ${type} name is too long. Maximum length is 64 characters. Please try again"
         return 1
     fi
 

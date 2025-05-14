@@ -9,13 +9,13 @@ function validate_data_type {
     local data_type=$2
 
     case $data_type in
-        "int")
+        "integer")
             if [[ ! "$input" =~ ^-?[0-9]+$ ]]; then
                 print_red "Error: Default value must be an integer."
                 return 1
             fi
             ;;
-        "varchar")
+        "string")
             if [[ "$input" =~ : || "$input" =~ $'\n' ]]; then
                 print_red "Error: Default value can't contain ':' or newlines."
                 return 1

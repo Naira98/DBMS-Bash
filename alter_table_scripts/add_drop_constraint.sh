@@ -5,10 +5,6 @@ set -e
 source ./utils/select_from_columns_utils.sh
 source ./utils/create_table_utils.sh
 
-table_name=$1
-table_data_path=$2
-table_metadata_path=$3
-
 col_name_number="$(select_from_columns "add or drop constraints from" "$table_metadata_path")"
 col_name="$(awk -F' ' '{print $1}' <<< $col_name_number)"
 col_num="$(awk -F' ' '{print $2}' <<< $col_name_number)"

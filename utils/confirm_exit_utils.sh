@@ -2,14 +2,17 @@
 
 source ./utils/output_utils.sh
 
-function exit_confirmation {
+shopt -s extglob
 
+function confirm_exit {
+    exit_status=$1
+
+    echo
     read -p "Do you really want to exit? (y/n): " confirm
 
-    if [[ "$confirm" == [Yy] || "$confirm" == "" ]]; then
+    if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
         print_blue "Exiting... Goodbye!"
-        exit 0
-    else
-        print_blue "Back to main menu..."
+        echo > /dev/stderr
+        exit $exit_status
     fi
 }

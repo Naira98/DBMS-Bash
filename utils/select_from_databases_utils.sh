@@ -14,12 +14,16 @@ function select_from_databases {
         return 1
     fi
 
+    echo > /dev/stderr
+    print_blue 'Available Databases:'
+    print_blue '--------------------'
+
     select chosen_db in "${dbs[@]}"; do
         if [[ -n $chosen_db ]]; then
             echo $chosen_db
             return 0
         else
-            print_red "Invalid selection. Please choose again."
+            print_red "Invalid database. Please try again."
         fi
     done
 }

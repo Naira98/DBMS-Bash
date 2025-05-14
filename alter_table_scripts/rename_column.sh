@@ -2,8 +2,7 @@
 
 set -e
 
-table_name=$1
-table_metadata_path=$2
+echo here in rename col
 
 source ./utils/select_from_columns_utils.sh
 source ./utils/create_table_utils.sh
