@@ -1,11 +1,13 @@
 #! /bin/bash
 
 source ./utils/output_utils.sh
+source ./utils/constants.sh
 
 tables_path="./$WORK_SPACE/$CONNECTED_DB"
 
 tables=$(ls $tables_path)
 
+echo
 if [[ -z $tables ]]; then
     echo "================== Tables =================="
     echo "No tables found in '$CONNECTED_DB' database"

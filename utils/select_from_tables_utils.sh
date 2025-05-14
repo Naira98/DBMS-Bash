@@ -15,12 +15,16 @@ function select_from_tables {
         return 1
     fi
 
+    echo > /dev/stderr
+    print_blue 'Available Tables:' > /dev/stderr
+    print_blue '-----------------' > /dev/stderr
+
     select chosen_table in "${tables[@]}"; do
         if [[ -n $chosen_table ]]; then
             echo $chosen_table
             return 0
         else
-            print_red "Invalid selection. Please choose again."
+            print_red "Invalid table. Please try again."
         fi
     done
 }

@@ -9,4 +9,4 @@ source ./utils/constants.sh
 db_name=$(select_from_databases "drop")
 
 rm -rf "./$WORK_SPACE/$db_name"
-print_green "Database '$db_name' successfully dropped."
+print_green "Database '$db_name' dropped successfully."

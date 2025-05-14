@@ -4,48 +4,98 @@ source ./utils/validate_utils.sh
 source ./utils/validate_constraints_utils.sh
 source ./utils/validate_table_data_utils.sh
 source ./utils/output_utils.sh
+source ./utils/constants.sh
+
+function ask_for_table_name {
+    while true; do
+        echo > /dev/stderr
+        read -rp "Enter the name of the table you want to create: " table_name
+
+        # Input Validation
+        table_name=$(validate_name "$table_name" "Table") || continue
+
+        # Existence Validation
+        table_path="./$WORK_SPACE/$CONNECTED_DB/$table_name" 
+        table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
+        error_message="Table '$table_name' already exists."
+        validate_file_does_not_exist "$table_path" "$error_message" || continue
+
+        echo "$table_name" "$table_path" "$table_metadata_path"
+        break
+    done
+}
+
+function ask_for_number_of_columns {
+    while true; do
+        echo > /dev/stderr
+        read -rp "Enter the number of columns: " cols_num
+
+        if [[ ! $cols_num =~ ^[0-9]+$ ]]; then
+            print_red 'Error: Number of columns must be a number'
+            continue
+        fi
+        if [[ $cols_num =~ ^0+$ ]]; then
+            print_red 'Error: Number of columns must be a positive number'
+            continue
+        fi
+
+        echo $cols_num
+        break
+    done
+}
 
 function ask_for_col_name {
     local table_metadata_path=$1
     local prompt=$2
     local col_num=$3
 
-    if (( $col_num == 1 )); then
-        echo "========================================" > /dev/stderr
-        echo Make sure this column is the primary key > /dev/stderr
-        echo "========================================" > /dev/stderr
-    fi
+    while true; do
 
-    read -rp "$prompt" col_name
-    col_name=$(validate_name "$col_name" "Column") || return $?
+        if (( $col_num == 1 )); then
+            echo > /dev/stderr
+            echo "==========================================" > /dev/stderr
+            echo " Make sure this column is the primary key " > /dev/stderr
+            echo "==========================================" > /dev/stderr
+        else
+            echo > /dev/stderr
+        fi
 
-    col_names=$(awk -F : '{print $1}' $table_metadata_path)
+        read -rp "$prompt" col_name
+        col_name=$(validate_name "$col_name" "Column") || continue
 
-    if echo "$col_names" | grep -qw "$col_name"; then
-        print_red "Error: Column name '$col_name' already exists"
-        return 1
-    fi
+        col_names=$(awk -F : '{print $1}' $table_metadata_path)
 
-    echo $col_name
-    return 0
+        if echo "$col_names" | grep -qw "$col_name"; then
+            print_red "Error: Column name '$col_name' already exists"
+            continue
+        fi
+
+        echo $col_name
+        break
+    done
 }
 
 function ask_for_data_type {
     PS3="Select column data type >> "
     local col_name=$1
 
-    select data_type in "int" "varchar" "boolean"; do
-        case $data_type in
-            int|varchar|boolean)
-                break
-                ;;
-            *)
-                print_red "Invalid type. Please choose again."
-                ;;
-        esac
+    while true; do
+        echo > /dev/stderr
+        echo "Data Type" > /dev/stderr
+        echo "---------" > /dev/stderr
+        select data_type in "integer" "string" "boolean"; do
+            case $data_type in
+                integer|string|boolean)
+                    echo $data_type
+                    return 0
+                    ;;
+                *)
+                    print_red "Invalid data type. Please try again."
+                    break
+                    ;;
+            esac
+        done
     done
-    echo $data_type
-    return 0
 }
 
 function ask_for_all_constraints {
@@ -69,7 +119,11 @@ function ask_for_all_constraints {
         not_null_marker=$(awk -F: '{if ($3 == "not_null") print "*"; else print " "}' <<< $chosen_constraints)
         default_marker=$(awk -F: '{if ($4 != "") print "*"; else print " "}' <<< $chosen_constraints)
         
-        select constraint in "[$unique_marker] unique" "[$not_null_marker] not null" "[$default_marker] default" "Done"; do
+        echo > /dev/stderr
+        echo "Constraints" > /dev/stderr
+        echo "-----------" > /dev/stderr
+
+        select constraint in "[$unique_marker] unique" "[$not_null_marker] not null" "[$default_marker] default" "# Done"; do
             case $REPLY in
                 1) #unique
                     if [[ $chosen_constraints == *:unique:* ]]; then
@@ -80,13 +134,28 @@ function ask_for_all_constraints {
                         fi
                     else
                         if [[ -n $old_constraints ]]; then
+
+                            # Alter table - Add column case
+                            if [[ $old_constraints = "::::" ]]; then
+                            
+                                echo num of records $(wc -l < "$table_data_path") "$table_data_path" > /dev/stderr
+                                if [[ $(wc -l < "$table_data_path") -gt 1 ]]; then
+                                    print_red "Error: Can't add unique constraint. There is a data in table."
+                                else
+                                    chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                                fi
+                            fi
+                            else
+
+                            # Alter table - Add or Drop contraints
                             function handle_error {
                                 print_red "Error: There are duplicate values in column $col_num."
                             }
 
                             validate_stored_data_are_unique "$col_num" "$table_data_path" || handle_error
+                            
+                            chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                         fi
-                        chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                     fi
                 ;;
 
@@ -99,13 +168,27 @@ function ask_for_all_constraints {
                         fi
                     else
                         if [[ -n $old_constraints ]]; then
-                            validate_stored_data_have_no_null_values "$col_num" "$table_data_path"
-                            if [[ $? -ne 0 ]]; then
-                                print_red "Error: Invalid not null constraint. There are duplicate values in column $col_name ."
-                                return 1
+
+                            # Alter table - Add column case
+                            if [[ $old_constraints = "::::" ]]; then
+                            
+                                echo num of records $(wc -l < "$table_data_path") "$table_data_path" > /dev/stderr
+                                if [[ $(wc -l < "$table_data_path") -gt 1 ]]; then
+                                    print_red "Error: Can't add not null constraint. There is a data in table."
+                                else
+                                    chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                                fi
                             fi
+                            else
+
+                            # Alter table - Add or Drop contraints
+                            function handle_error {
+                                print_red "Error: Invalid not null constraint. There are duplicate values in column $col_name ."
+                            }
+                            validate_stored_data_have_no_null_values "$col_num" "$table_data_path" || handle_error
+
+                            chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                         fi
-                        chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                     fi
                 ;;
 
@@ -116,7 +199,11 @@ function ask_for_all_constraints {
                         else
                             read -rp "Enter a default value for $col_name: " default_value
 
-                            validate_data_type $default_value $data_type
+                            function handle_error {
+                                print_red "Error: Invalid default constraint. Column data type doen't match in column $col_name ."
+                            }
+
+                            validate_data_type $default_value $data_type || handle_error
 
                             if [[ $? -eq 0 ]]; then
                                 chosen_constraints=$(awk -F: -v default_value="$default_value" '{$4=default_value; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
@@ -133,20 +220,20 @@ function ask_for_all_constraints {
                 ;;
 
                 *)
-                    print_red "Invalid input. please try again"
+                    print_red "Invalid constraint. please try again"
             esac
             break
         done
     done
 }
 
-function delete_table_and_abort {
-    echo in delete table and abort
-    local table_path=$1
-    local table_metadata_path=$2
+# function delete_table_and_abort {
+#     echo in delete table and abort
+#     local table_path=$1
+#     local table_metadata_path=$2
 
-    rm -f "$table_path" "$table_metadata_path"
+#     rm -f "$table_path" "$table_metadata_path"
 
-    return 1
-}
+#     return 1
+# }
 

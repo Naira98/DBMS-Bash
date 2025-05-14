@@ -8,9 +8,9 @@ PS3="Choose an option >> "
 echo "  ===========================================================  "
 echo " || Welcome to the Our Database Management System (DBMS) 👋 || "
 echo "  ===========================================================  "
-echo
 
 while true; do
+    echo
     echo "================== Main Menu =================="
     select choice in "Create Database" "List Database" "Connect Database" "Drop Database" "Exit"
     do
@@ -32,10 +32,9 @@ while true; do
                 ;;
             "Drop Database")
                 ./db_scripts/drop_db.sh
-                # clear_after_1.5_sec
                 ;;
             "Exit")
-                exit_confirmation
+                confirm_exit 0
                 ;;
             *)
                 print_red "Invalid option. Please try again."

@@ -4,8 +4,10 @@ export CONNECTED_DB=$1
 PS3="${CONNECTED_DB}_db >> "
 
 source ./utils/output_utils.sh
+source ./utils/confirm_exit_utils.sh
 
 while true; do
+    echo
     echo "================== Tables Menu =================="
     select choice in "Create Table" "List Tables" "Queries on Table" "Alter Table" "Drop Table" "Back To Main Menu" "Exit"
     do
@@ -29,8 +31,7 @@ while true; do
                 exit 0
                 ;;
             "Exit")
-                echo "Exiting..."
-                exit 1
+                confirm_exit 1
                 ;;
             *)
                 print_red "Invalid option. Please try again."
