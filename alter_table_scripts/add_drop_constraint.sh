@@ -1,22 +1,11 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 set -e
 
 source ./utils/select_from_columns_utils.sh
 source ./utils/create_table_utils.sh
 
-col_name_number="$(select_from_columns "add or drop constraints from" "$table_metadata_path")"
-col_name="$(awk -F' ' '{print $1}' <<< $col_name_number)"
-col_num="$(awk -F' ' '{print $2}' <<< $col_name_number)"
-
-read col_data_type col_constraints <<< $(awk -F: -v col_name=$col_name '
-   { if ( $1 == col_name ) {
-        data_type = $2
-        constraints = ""
-        for (i=3; i<=NF; i++) constraints = constraints (i > 3 ? ":" : "") $i
-        print data_type, constraints
-    }}
-' $table_metadata_path)
+read col_name col_num col_data_type col_constraints <<< "$(select_from_columns "add or drop constraints from" "${table_metadata_path}")"
 
 new_constraints=$(ask_for_all_constraints "$col_name" "$col_data_type" "$col_constraints" "$table_data_path" "$col_num")
 

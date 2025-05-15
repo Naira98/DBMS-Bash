@@ -1,10 +1,13 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 source ./utils/output_utils.sh
 source ./utils/select_from_tables_utils.sh
 
-TABLE_NAME=$(select_from_tables)
-PS3="${TABLE_NAME}_table >> "
+export table_name=$(select_from_tables "query on")
+export table_data_path="./$WORK_SPACE/$CONNECTED_DB/$table_name"
+export table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
+
+PS3="${table_name}_table >> "
 
 while true; do
     echo

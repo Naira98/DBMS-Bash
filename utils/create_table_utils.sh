@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 source ./utils/validate_utils.sh
 source ./utils/validate_constraints_utils.sh

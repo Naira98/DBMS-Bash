@@ -1,4 +1,3 @@
-#! /bin/bash
 #! /usr/bin/bash
 
 # Get the current script's directory and cd into it
