@@ -67,10 +67,22 @@ function read_condition {
 function get_matched_rows {
     value=$1
     operator=$2
+    no_condition=$3
 
-    matched_rows=$(awk -F : -v condition_col_num="$condition_col_num" -v value="$value" -v chosen_col_nums="$chosen_col_nums" -v operator="$operator" '
+    matched_rows=$(awk -F : -v condition_col_num="$condition_col_num" -v value="$value" -v chosen_col_nums="$chosen_col_nums" -v operator="$operator" -v no_condition="$no_condition" '
     {
-        if (operator == "=") {
+        if (no_condition) {
+            if (chosen_col_nums == 'all') {
+                print $0
+            } else {
+                split(chosen_col_nums, cols_array, " ")
+                result = ""
+                for (i in cols_array) {
+                    result = result (i == 1 ? "" : ":") $cols_array[i]
+                }
+                print result
+            }   
+        } else if (operator == "=") {
             if ( $condition_col_num == value ) {
                 if (chosen_col_nums == 'all') {
                     print $0
@@ -187,7 +199,7 @@ function ask_for_condition {
                                             continue
                                         fi
 
-                                        matched_rows=$(get_matched_rows "$value" "$operator")
+                                        matched_rows=$(get_matched_rows "$value" "$operator" "false")
 
                                         echo "${matched_rows[@]}"
                                         return 0
@@ -201,7 +213,7 @@ function ask_for_condition {
                     else 
                         value=$(read_condition "$col_name" "=")
 
-                        matched_rows=$(get_matched_rows "$value" "=")
+                        matched_rows=$(get_matched_rows "$value" "=" "false")
 
                         echo "$matched_rows"
                         return 0
@@ -210,18 +222,7 @@ function ask_for_condition {
                 ;;
 
                 "No condition")
-                    matched_rows=$(awk -F : -v chosen_col_nums="$chosen_col_nums" '{
-                        if (chosen_col_nums == 'all') {
-                            print $0
-                        } else {
-                            split(chosen_col_nums, cols_array, " ")
-                            result = ""
-                            for (i in cols_array) {
-                                result = result (i == 1 ? "" : ":") $cols_array[i]
-                            }
-                            print result
-                        }   
-                    }' $table_data_path)
+                    matched_rows=$(get_matched_rows "" "" "true")
 
                     echo "$matched_rows" 
                     return 0
