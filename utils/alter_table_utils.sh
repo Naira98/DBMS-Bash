@@ -1,3 +1,5 @@
+#! /usr/bin/bash
+
 function ask_for_unique_and_default_constraints {
     PS3="Select column constraints one at a time >> "
 

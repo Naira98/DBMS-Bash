@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 source ./utils/queries_utils.sh
 

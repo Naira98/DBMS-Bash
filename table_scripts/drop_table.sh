@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 set -e
 source ./utils/select_from_tables_utils.sh

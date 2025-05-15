@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 source ./utils/select_from_tables_utils.sh
 source ./utils/constants.sh
