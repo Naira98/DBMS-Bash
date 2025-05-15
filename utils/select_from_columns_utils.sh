@@ -17,7 +17,17 @@ function select_from_columns {
 
     select chosen_col in ${columns[@]}; do
         if [[ -n $chosen_col ]]; then
-            echo $chosen_col $REPLY 
+
+            read col_data_type col_constraints <<< $(awk -F: -v col_name=$chosen_col '
+                { if ( $1 == col_name ) {
+                    data_type = $2
+                    constraints = ""
+                    for (i=3; i<=NF; i++) constraints = constraints (i > 3 ? ":" : "") $i
+                    print data_type, constraints
+                }}
+            ' $table_metadata_path)
+
+            echo "$chosen_col" "$REPLY" "$col_data_type" "$col_constraints"
             echo 
             return 0
         else

@@ -2,10 +2,11 @@
 
 source ./utils/select_from_tables_utils.sh
 source ./utils/constants.sh
+source ./utils/output_utils.sh
 
 export table_name=$(select_from_tables "alter")
-export table_data_path=./$WORK_SPACE/$CONNECTED_DB/$table_name
-export table_metadata_path=./$WORK_SPACE/$CONNECTED_DB/.$table_name
+export table_data_path="./$WORK_SPACE/$CONNECTED_DB/$table_name"
+export table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
 
 if [[ -z $table_name ]]; then
     exit 0
@@ -35,6 +36,10 @@ while true; do
             ;;
             "Back to Tables Menu")
             exit 0
+            ;;
+            "*")
+                print_red "Invalid option. Please try again."
+            ;;
         esac
         break
     done
