@@ -6,6 +6,8 @@ set -e
 
 PS3="Choose an option: "
 
+query="SELECT col_names FROM $table_name WHERE condition"
+
 while true; do
     echo
     echo "SELECT col_name"
@@ -14,17 +16,17 @@ while true; do
         case $cols in
             "All Columns")
                 headers=$(get_table_headers "all")
-                matched_rows=$(ask_for_condition "all")
+                matched_rows=$(ask_for_condition "all" "select" "$query")
 
                 echo "ENTERING TABLE FUNCTION"
                 print_table "$headers" "$matched_rows"
                 exit 0
-            ;;
+                ;;
 
             "Some Columns")
                 chosen_cols_nums=$(ask_for_some_columns)
                 headers=$(get_table_headers "${chosen_cols_nums}")
-                matched_rows=$(ask_for_condition "${chosen_cols_nums}")
+                matched_rows=$(ask_for_condition "${chosen_cols_nums}" "select" "$query")
 
                 echo "ENTERING TABLE FUNCTION"
                 print_table "$headers" "$matched_rows"
