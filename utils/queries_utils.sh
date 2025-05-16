@@ -167,11 +167,35 @@ function get_matched_rows {
     return 0
 }
 
+function delete_matched_rows {
+    value=$1
+    operator=$2
+
+    awk -F : -v condition_col_num="$condition_col_num" -v value="$value" -v operator="$operator" '
+    {
+        if (operator == "=" && $condition_col_num != value) {
+            print $0
+        } else if (operator == "!=" && $condition_col_num == value) {
+            print $0
+        } else if (operator == ">" && $condition_col_num <= value) {
+            print $0
+        } else if (operator == ">=" && $condition_col_num < value) {
+            print $0
+        } else if (operator == "<" && $condition_col_num >= value) {
+            print $0
+        } else if (operator == "<=" && $condition_col_num > value) {
+            print $0
+        }
+    }' "$table_data_path" > "${table_data_path}.tmp" && mv "${table_data_path}.tmp" "$table_data_path"
+
+    return 0
+}
+
 
 function ask_for_condition {
     chosen_col_nums=$1
-
-    query="SELECT col_names FROM $table_name WHERE condition"
+    reason=$2
+    query=$3
 
     while true; do
         echo > /dev/stderr
@@ -199,6 +223,11 @@ function ask_for_condition {
                                             continue
                                         fi
 
+                                        if [[ "$reason" = "delete" ]]; then
+                                            $(delete_matched_rows "$value" "$operator")
+                                            return 0
+                                        fi
+
                                         matched_rows=$(get_matched_rows "$value" "$operator" "false")
 
                                         echo "${matched_rows[@]}"
@@ -213,6 +242,11 @@ function ask_for_condition {
                     else 
                         value=$(read_condition "$col_name" "=")
 
+                        if [[ "$reason" = "delete" ]]; then
+                            $(delete_matched_rows "$value" "=")
+                            return 0
+                        fi
+
                         matched_rows=$(get_matched_rows "$value" "=" "false")
 
                         echo "$matched_rows"
@@ -222,6 +256,11 @@ function ask_for_condition {
                 ;;
 
                 "No condition")
+                    if [[ "$reason" == "delete" ]]; then
+                        sed -i '1,$d' "$table_data_path"
+                        return 0
+                    fi
+
                     matched_rows=$(get_matched_rows "" "" "true")
 
                     echo "$matched_rows" 
