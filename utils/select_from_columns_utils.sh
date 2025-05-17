@@ -9,7 +9,7 @@ function select_from_columns {
 
     PS3="Select column to $reason >> "
 
-    columns=($(awk -F: '{ print $1 }' "$table_metadata_path"))
+    local columns=($(awk -F: '{ print $1 }' "$table_metadata_path"))
 
     echo > /dev/stderr
     print_blue 'Available Columns:' > /dev/stderr

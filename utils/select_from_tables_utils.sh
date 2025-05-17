@@ -8,7 +8,7 @@ function select_from_tables {
 
     PS3="Select table to $reason >> "
 
-    tables=($(ls ./$WORK_SPACE/$CONNECTED_DB))
+    local tables=($(ls ./$WORK_SPACE/$CONNECTED_DB))
 
     if [[ ${#tables[@]} -eq 0 ]]; then
         print_red "There's no tables to $reason"

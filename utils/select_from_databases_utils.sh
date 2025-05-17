@@ -7,7 +7,7 @@ function select_from_databases {
 
     PS3="Select database to $reason >> "
 
-    dbs=($(ls -F ./$WORK_SPACE | grep '/$' | sed 's/\/$//'))
+    local dbs=($(ls -F ./$WORK_SPACE | grep '/$' | sed 's/\/$//'))
 
     if [[ ${#dbs[@]} -eq 0 ]]; then
         print_red "There's no databases to $reason"
