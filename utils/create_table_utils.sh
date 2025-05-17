@@ -135,29 +135,31 @@ function ask_for_all_constraints {
                     else
                         if [[ -n $old_constraints ]]; then
 
-                            # Alter table - Add column case
+                            # Add column - Alter table
                             if [[ $old_constraints = "::::" ]]; then
                             
-                                echo num of records $(wc -l < "$table_data_path") "$table_data_path" > /dev/stderr
                                 if [[ $(wc -l < "$table_data_path") -gt 1 ]]; then
                                     print_red "Error: Can't add unique constraint. There is a data in table."
                                 else
                                     chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                                 fi
-                            fi
+
                             else
 
-                            # Alter table - Add or Drop contraints
-                            function handle_error {
-                                print_red "Error: There are duplicate values in column $col_num."
-                            }
+                                # Add or Drop contraints - Alter table
+                                function handle_error {
+                                    print_red "Error: There are duplicate values in column $col_num."
+                                }
 
-                            validate_stored_data_are_unique "$col_num" "$table_data_path" || handle_error
-                            
+                                validate_stored_data_are_unique "$col_num" "$table_data_path" || handle_error
+                                
+                                chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                            fi
+                        else
                             chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                         fi
                     fi
-                ;;
+                    ;;
 
                 2) #not_null
                     if [[ $chosen_constraints == *:not_null:* ]]; then
@@ -172,14 +174,14 @@ function ask_for_all_constraints {
                             # Alter table - Add column case
                             if [[ $old_constraints = "::::" ]]; then
                             
-                                echo num of records $(wc -l < "$table_data_path") "$table_data_path" > /dev/stderr
                                 if [[ $(wc -l < "$table_data_path") -gt 1 ]]; then
                                     print_red "Error: Can't add not null constraint. There is a data in table."
                                 else
                                     chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                                 fi
                             fi
-                            else
+
+                        else
 
                             # Alter table - Add or Drop contraints
                             function handle_error {
@@ -190,7 +192,7 @@ function ask_for_all_constraints {
                             chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                         fi
                     fi
-                ;;
+                    ;;
 
                 3) #default
                     if [[ $chosen_constraints =~ :$ ]]; then
@@ -212,28 +214,18 @@ function ask_for_all_constraints {
                     else
                         chosen_constraints=$(awk -F: '{$4=""; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                     fi
-                ;;
+                    ;;
 
                 4) # Done
                     echo $chosen_constraints
                     return 0
-                ;;
+                    ;;
 
                 *)
                     print_red "Invalid constraint. please try again"
+                    ;;
             esac
             break
         done
     done
 }
-
-# function delete_table_and_abort {
-#     echo in delete table and abort
-#     local table_path=$1
-#     local table_metadata_path=$2
-
-#     rm -f "$table_path" "$table_metadata_path"
-
-#     return 1
-# }
-
