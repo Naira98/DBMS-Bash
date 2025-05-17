@@ -3,14 +3,8 @@
 source ./utils/output_utils.sh
 
 function validate_stored_data_have_no_null_values {
-    col_num=$1
-    table_data_path=$2
-
-    # Check if the column number and file path are provided
-    if [[ -z "$col_num" || -z "$table_data_path" ]]; then
-        echo "Column number or table data path not provided."
-        return 1
-    fi
+    local col_num=$1
+    local table_data_path=$2
 
     # Validate that the file exists
     if [[ ! -f "$table_data_path" ]]; then
@@ -30,14 +24,8 @@ function validate_stored_data_have_no_null_values {
 }
 
 function validate_stored_data_are_unique {
-    col_num=$1
-    table_data_path=$2
-
-    # Check if the column number and file path are provided
-    if [[ -z "$col_num" || -z "$table_data_path" ]]; then
-        echo "Column number or table data path not provided."
-        return 1
-    fi
+    local col_num=$1
+    local table_data_path=$2
 
     # Validate that the file exists
     if [[ ! -f "$table_data_path" ]]; then

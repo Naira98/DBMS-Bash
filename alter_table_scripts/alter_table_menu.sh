@@ -21,6 +21,7 @@ while true; do
         case $option in
             "Rename Table")
             ./alter_table_scripts/rename_table.sh
+            exit 0
             ;;
             "Add Column")
             ./alter_table_scripts/add_column.sh

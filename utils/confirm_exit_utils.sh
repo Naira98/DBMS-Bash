@@ -5,7 +5,7 @@ source ./utils/output_utils.sh
 shopt -s extglob
 
 function confirm_exit {
-    exit_status=$1
+    local exit_status=$1
 
     echo
     read -p "Do you really want to exit? (y/n): " confirm
