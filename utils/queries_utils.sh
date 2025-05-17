@@ -5,15 +5,15 @@ source ./utils/select_from_columns_utils.sh
 
 function ask_for_some_columns {
     local columns=($(awk -F: '{ print $1 }' "$table_metadata_path"))
-    local chosen_column_numss=()
+    local chosen_column_nums=()
 
     while true; do
-        menu_cols=()
+        local menu_cols=()
 
         for i in "${!columns[@]}"; do
-            col="${columns[$i]}"
-            col_num=$((i + 1))
-            if [[ " ${chosen_column_numss[@]} " == *" $col_num "* ]]; then
+            local col="${columns[$i]}"
+            local col_num=$((i + 1))
+            if [[ " ${chosen_column_nums[@]} " == *" $col_num "* ]]; then
                 menu_cols+=("[*] $col")
             else
                 menu_cols+=("[ ] $col")
@@ -24,18 +24,18 @@ function ask_for_some_columns {
         select option in "${menu_cols[@]}" "# done"; do
             case $REPLY in
                 [1-${#menu_cols[@]}])
-                    if [[ " ${chosen_column_numss[@]} " == *" $REPLY "* ]]; then
-                        chosen_column_numss=("${chosen_column_numss[@]/$REPLY}")
+                    if [[ " ${chosen_column_nums[@]} " == *" $REPLY "* ]]; then
+                        local chosen_column_nums=("${chosen_column_nums[@]/$REPLY}")
                     else
-                        chosen_column_numss+=("$REPLY")
+                        local chosen_column_nums+=("$REPLY")
                     fi
                 ;;
 
                 $((${#menu_cols[@]}+1))) # done
-                    if (( ${#chosen_column_numss[@]} < 1 )); then
+                    if (( ${#chosen_column_nums[@]} < 1 )); then
                         print_red "Error: You must select at least one column."
                     else
-                        echo "${chosen_column_numss[@]}"
+                        echo "${chosen_column_nums[@]}"
                         return 0
                     fi
                 ;;
@@ -48,8 +48,6 @@ function ask_for_some_columns {
         done
     done
 }
-
-
 
 
 function read_condition {
@@ -216,7 +214,7 @@ function ask_for_condition {
                             select operator in "=" "!=" ">" ">=" "<" "<="; do
                                 case $REPLY in
                                     [1-6]) # All 6 operators
-                                        value=$(read_condition "$col_name" "$operator")
+                                        local value=$(read_condition "$col_name" "$operator")
 
                                         if [[ $operator = ">" || $operator = ">=" || $operator = "<" || $operator = "<=" ]]; then
                                             if [[ -z "$value" ]]; then
@@ -235,7 +233,7 @@ function ask_for_condition {
                                             return 0
                                         fi
 
-                                        matched_rows=$(get_matched_rows "$value" "$operator" "false")
+                                        local matched_rows=$(get_matched_rows "$value" "$operator" "false")
 
                                         echo "${matched_rows[@]}"
                                         return 0
@@ -247,14 +245,14 @@ function ask_for_condition {
                             done
                         done
                     else 
-                        value=$(read_condition "$col_name" "=")
+                        local value=$(read_condition "$col_name" "=")
 
                         if [[ "$reason" = "delete" ]]; then
                             $(delete_matched_rows "$value" "=")
                             return 0
                         fi
 
-                        matched_rows=$(get_matched_rows "$value" "=" "false")
+                        local matched_rows=$(get_matched_rows "$value" "=" "false")
 
                         echo "$matched_rows"
                         return 0
@@ -268,7 +266,7 @@ function ask_for_condition {
                         return 0
                     fi
 
-                    matched_rows=$(get_matched_rows "" "" "true")
+                    local matched_rows=$(get_matched_rows "" "" "true")
 
                     echo "$matched_rows" 
                     return 0
@@ -289,9 +287,9 @@ function get_table_headers {
     local col_nums=$1
 
     if [[ $col_nums = "all" ]]; then
-        headers=$(awk -F: '{print $1}' "$table_metadata_path" | paste -sd:)
+        local headers=$(awk -F: '{print $1}' "$table_metadata_path" | paste -sd:)
     else
-        headers=$(awk -F: -v col_nums="$col_nums" '
+        local headers=$(awk -F: -v col_nums="$col_nums" '
         {
             split(col_nums, cols_array, " ")
             for (i in cols_array) {
@@ -308,14 +306,14 @@ function print_horizontal_separator() {
     local vertical_position="$1"
     local columns_lengths=(${@:2})
 
-    box_left_var="BOX_"$vertical_position"_LEFT"
-    box_middle_var="BOX_"$vertical_position"_MIDDLE"
-    box_right_var="BOX_"$vertical_position"_RIGHT"
+    local box_left_var="BOX_"$vertical_position"_LEFT"
+    local box_middle_var="BOX_"$vertical_position"_MIDDLE"
+    local box_right_var="BOX_"$vertical_position"_RIGHT"
 
     # Dynamic Variable Name
-    box_left=${!box_left_var}
-    box_middle=${!box_middle_var}
-    box_right=${!box_right_var}
+    local box_left=${!box_left_var}
+    local box_middle=${!box_middle_var}
+    local box_right=${!box_right_var}
 
     for ((column = 0; column < ${#columns_lengths[@]}; column++)); do
         if [[ $column == 0 ]]; then
@@ -348,7 +346,7 @@ function print_row() {
     local columns_lengths=(${@:2})
 
     for ((column = 0; column < ${#columns_lengths[@]}; column++)); do
-        cell_table_content=$(echo -n $row | cut -d : -f $(($column + 1)))
+        local cell_table_content=$(echo -n $row | cut -d : -f $(($column + 1)))
 
         if [[ -z "$cell_table_content" ]]; then
             cell_table_content="[null]"
@@ -383,12 +381,12 @@ function print_table {
     BOX_DOUBLE_HORIZONTAL=═
     BOX_DOUBLE_VERTICAL=║
 
-    column_nums=$(($(head -n 1 <<< "$table_content" | tr -dc ":" | wc -c) + 1))
+    local column_nums=$(($(head -n 1 <<< "$table_content" | tr -dc ":" | wc -c) + 1))
 
-    columns_lengths=()
+    local columns_lengths=()
 
     for ((column = 1; column <= $column_nums; column++)); do
-        length=0
+        local length=0
 
         while read row; do
             cell_table_content=$(echo -n "$row" | cut -d : -f $column)
@@ -406,7 +404,7 @@ function print_table {
         columns_lengths[$column]=$length
     done
 
-    is_first_row=true
+    local is_first_row=true
 
     while read row; do
 
