@@ -17,9 +17,10 @@ while true; do
             "All Columns")
                 headers=$(get_table_headers "all")
                 matched_rows=$(ask_for_condition "all" "select" "$query")
+                
+                content=$(echo -e "$headers\n$matched_rows")
 
-                echo "ENTERING TABLE FUNCTION"
-                print_table "$headers" "$matched_rows"
+                print_table "$content"
                 exit 0
                 ;;
 
@@ -28,8 +29,10 @@ while true; do
                 headers=$(get_table_headers "${chosen_cols_nums}")
                 matched_rows=$(ask_for_condition "${chosen_cols_nums}" "select" "$query")
 
-                echo "ENTERING TABLE FUNCTION"
-                print_table "$headers" "$matched_rows"
+
+                content=$(echo -e "$headers\n$matched_rows")
+
+                print_table "$content"
                 exit 0
             
                 ;;

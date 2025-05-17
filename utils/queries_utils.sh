@@ -4,8 +4,8 @@ source ./utils/output_utils.sh
 source ./utils/select_from_columns_utils.sh
 
 function ask_for_some_columns {
-    columns=($(awk -F: '{ print $1 }' "$table_metadata_path"))
-    chosen_cols_nums=()
+    local columns=($(awk -F: '{ print $1 }' "$table_metadata_path"))
+    local chosen_column_numss=()
 
     while true; do
         menu_cols=()
@@ -13,7 +13,7 @@ function ask_for_some_columns {
         for i in "${!columns[@]}"; do
             col="${columns[$i]}"
             col_num=$((i + 1))
-            if [[ " ${chosen_cols_nums[@]} " == *" $col_num "* ]]; then
+            if [[ " ${chosen_column_numss[@]} " == *" $col_num "* ]]; then
                 menu_cols+=("[*] $col")
             else
                 menu_cols+=("[ ] $col")
@@ -24,18 +24,18 @@ function ask_for_some_columns {
         select option in "${menu_cols[@]}" "# done"; do
             case $REPLY in
                 [1-${#menu_cols[@]}])
-                    if [[ " ${chosen_cols_nums[@]} " == *" $REPLY "* ]]; then
-                        chosen_cols_nums=("${chosen_cols_nums[@]/$REPLY}")
+                    if [[ " ${chosen_column_numss[@]} " == *" $REPLY "* ]]; then
+                        chosen_column_numss=("${chosen_column_numss[@]/$REPLY}")
                     else
-                        chosen_cols_nums+=("$REPLY")
+                        chosen_column_numss+=("$REPLY")
                     fi
                 ;;
 
                 $((${#menu_cols[@]}+1))) # done
-                    if (( ${#chosen_cols_nums[@]} < 1 )); then
+                    if (( ${#chosen_column_numss[@]} < 1 )); then
                         print_red "Error: You must select at least one column."
                     else
-                        echo "${chosen_cols_nums[@]}"
+                        echo "${chosen_column_numss[@]}"
                         return 0
                     fi
                 ;;
@@ -53,8 +53,8 @@ function ask_for_some_columns {
 
 
 function read_condition {
-    col_name=$1
-    operator=$2
+    local col_name=$1
+    local operator=$2
 
     echo > /dev/stderr
     read -rp "WHERE "$col_name" "$operator" " value
@@ -65,13 +65,13 @@ function read_condition {
 
 
 function get_matched_rows {
-    value=$1
-    operator=$2
-    no_condition=$3
+    local value=$1
+    local operator=$2
+    local no_condition=$3
 
-    matched_rows=$(awk -F : -v condition_col_num="$condition_col_num" -v value="$value" -v chosen_col_nums="$chosen_col_nums" -v operator="$operator" -v no_condition="$no_condition" '
+    local matched_rows=$(awk -F : -v condition_col_num="$condition_col_num" -v value="$value" -v chosen_col_nums="$chosen_col_nums" -v operator="$operator" -v no_condition="$no_condition" '
     {
-        if (no_condition) {
+        if (no_condition == "true") {
             if (chosen_col_nums == 'all') {
                 print $0
             } else {
@@ -168,8 +168,8 @@ function get_matched_rows {
 }
 
 function delete_matched_rows {
-    value=$1
-    operator=$2
+    local value=$1
+    local operator=$2
 
     awk -F : -v condition_col_num="$condition_col_num" -v value="$value" -v operator="$operator" '
     {
@@ -193,9 +193,9 @@ function delete_matched_rows {
 
 
 function ask_for_condition {
-    chosen_col_nums=$1
-    reason=$2
-    query=$3
+    local chosen_col_nums=$1
+    local reason=$2
+    local query=$3
 
     while true; do
         echo > /dev/stderr
@@ -218,9 +218,16 @@ function ask_for_condition {
                                     [1-6]) # All 6 operators
                                         value=$(read_condition "$col_name" "$operator")
 
-                                        if ! [[ "$value" =~ ^-?[0-9]+$ ]]; then
+                                        if [[ $operator = ">" || $operator = ">=" || $operator = "<" || $operator = "<=" ]]; then
+                                            if [[ -z "$value" ]]; then
+                                                print_red "Invalid input: Value with this operator can't be empty."
+                                                break
+                                            fi
+                                        fi
+
+                                        if ! [[ -z "$value" || "$value" =~ ^-?[0-9]+$ ]]; then
                                             print_red "Invalid input: Value must be a number."
-                                            continue
+                                            break
                                         fi
 
                                         if [[ "$reason" = "delete" ]]; then
@@ -279,7 +286,7 @@ function ask_for_condition {
 
 
 function get_table_headers {
-    col_nums=$1
+    local col_nums=$1
 
     if [[ $col_nums = "all" ]]; then
         headers=$(awk -F: '{print $1}' "$table_metadata_path" | paste -sd:)
@@ -297,28 +304,121 @@ function get_table_headers {
     echo "$headers"
 }
 
+function print_horizontal_separator() {
+    local vertical_position="$1"
+    local columns_lengths=(${@:2})
+
+    box_left_var="BOX_"$vertical_position"_LEFT"
+    box_middle_var="BOX_"$vertical_position"_MIDDLE"
+    box_right_var="BOX_"$vertical_position"_RIGHT"
+
+    # Dynamic Variable Name
+    box_left=${!box_left_var}
+    box_middle=${!box_middle_var}
+    box_right=${!box_right_var}
+
+    for ((column = 0; column < ${#columns_lengths[@]}; column++)); do
+        if [[ $column == 0 ]]; then
+            echo -n $box_left
+        else
+            echo -n $box_middle
+        fi
+
+        print_horizontal_line $vertical_position $((${columns_lengths[$column]} + 2)) #extra 2 spaces
+    done
+
+    echo $box_right
+}
+
+function print_horizontal_line() {
+    local vertical_position="$1"
+    local width="$2"
+
+    for ((i = 0; i < $width; i++)); do
+        if [[ $vertical_position = "MIDDLE" ]]; then
+            echo -n $BOX_HORIZONTAL
+        else
+            echo -n $BOX_DOUBLE_HORIZONTAL
+        fi
+    done
+}
+
+function print_row() {
+    local row="$1"
+    local columns_lengths=(${@:2})
+
+    for ((column = 0; column < ${#columns_lengths[@]}; column++)); do
+        cell_table_content=$(echo -n $row | cut -d : -f $(($column + 1)))
+
+        if [[ -z "$cell_table_content" ]]; then
+            cell_table_content="[null]"
+        fi
+
+        if [[ $column -eq 0 ]]; then
+            prefix=$BOX_DOUBLE_VERTICAL
+        else
+            prefix=$BOX_VERTICAL
+        fi
+    
+        printf "$prefix %-${columns_lengths[$column]}s " "$cell_table_content"
+    done
+
+    echo "$BOX_DOUBLE_VERTICAL"
+}
+
 function print_table {
-    headers=$1
-    rows=$2
+    local table_content="$1"
 
-    echo > /dev/stderr
-    echo "RAW DATA IN PRINT TABLE" > /dev/stderr
-    echo "$headers" > /dev/stderr
-    echo "${rows[@]}" > /dev/stderr
-    echo > /dev/stderr
+    BOX_TOP_LEFT=╔
+    BOX_TOP_MIDDLE=╤
+    BOX_TOP_RIGHT=╗
+    BOX_MIDDLE_LEFT=╟
+    BOX_MIDDLE_MIDDLE=┼
+    BOX_MIDDLE_RIGHT=╢
+    BOX_BOTTOM_LEFT=╚
+    BOX_BOTTOM_MIDDLE=╧
+    BOX_BOTTOM_RIGHT=╝
+    BOX_VERTICAL=│
+    BOX_HORIZONTAL=─
+    BOX_DOUBLE_HORIZONTAL=═
+    BOX_DOUBLE_VERTICAL=║
 
-    # # Print headers
-    # IFS=: read -r -a header_array <<< "$headers"
-    # printf '%-20s' "${header_array[@]}"
-    # echo > /dev/stderr
-    # printf '%0.s-' {1..80}
-    # echo > /dev/stderr
+    column_nums=$(($(head -n 1 <<< "$table_content" | tr -dc ":" | wc -c) + 1))
 
-    # # Print rows
-    # IFS=$'\n' read -r -d '' -a row_array <<< "$rows"
-    # for row in "${row_array[@]}"; do
-    #     IFS=: read -r -a col_array <<< "$row"
-    #     printf '%-20s' "${col_array[@]}"
-    #     echo > /dev/stderr
-    # done
+    columns_lengths=()
+
+    for ((column = 1; column <= $column_nums; column++)); do
+        length=0
+
+        while read row; do
+            cell_table_content=$(echo -n "$row" | cut -d : -f $column)
+            cell_length=$(echo -n "$cell_table_content" | wc -c)
+
+            if [[ $cell_length -eq 0 ]]; then
+                cell_length=6 # [null]
+            fi
+
+            if [[ $cell_length -gt $length ]]; then
+                length=$cell_length
+            fi
+        done <<< "$table_content"
+
+        columns_lengths[$column]=$length
+    done
+
+    is_first_row=true
+
+    while read row; do
+
+        if [[ $is_first_row = 'false' ]]; then
+            print_horizontal_separator MIDDLE "${columns_lengths[@]}" 
+        else
+            print_horizontal_separator TOP "${columns_lengths[@]}" 
+            is_first_row=false
+        fi
+
+        print_row "$row" "${columns_lengths[@]}"
+    done <<< "$table_content"
+
+    print_horizontal_separator BOTTOM "${columns_lengths[@]}" 
 }
