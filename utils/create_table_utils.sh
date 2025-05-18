@@ -133,7 +133,10 @@ function ask_for_all_constraints {
                             chosen_constraints=${chosen_constraints/:unique:/::}
                         fi
                     else
-                        if [[ -n $old_constraints ]]; then
+                        # Create table
+                        if [[ -z $old_constraints ]]; then
+                            chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                        else
 
                             # Add column - Alter table
                             if [[ $old_constraints = "::::" ]]; then
@@ -155,8 +158,6 @@ function ask_for_all_constraints {
                                 
                                 chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                             fi
-                        else
-                            chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                         fi
                     fi
                     ;;
@@ -169,8 +170,11 @@ function ask_for_all_constraints {
                             chosen_constraints=${chosen_constraints/:not_null:/::}
                         fi
                     else
-                        if [[ -n $old_constraints ]]; then
+                        # Create table
+                        if [[ -z $old_constraints ]]; then
+                            chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
 
+                        else
                             # Alter table - Add column case
                             if [[ $old_constraints = "::::" ]]; then
                             
@@ -179,17 +183,16 @@ function ask_for_all_constraints {
                                 else
                                     chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                                 fi
+                            else
+
+                                # Alter table - Add or Drop contraints
+                                function handle_error {
+                                    print_red "Error: Invalid not null constraint. There are duplicate values in column $col_name ."
+                                }
+                                validate_stored_data_have_no_null_values "$col_num" "$table_data_path" || handle_error
+
+                                chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                             fi
-
-                        else
-
-                            # Alter table - Add or Drop contraints
-                            function handle_error {
-                                print_red "Error: Invalid not null constraint. There are duplicate values in column $col_name ."
-                            }
-                            validate_stored_data_have_no_null_values "$col_num" "$table_data_path" || handle_error
-
-                            chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                         fi
                     fi
                     ;;
