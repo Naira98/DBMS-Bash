@@ -208,7 +208,7 @@ function ask_for_all_constraints {
                                 print_red "Error: Invalid default constraint. Column data type doen't match in column $col_name ."
                             }
 
-                            validate_data_type $default_value $data_type || handle_error
+                            validate_data_type "$data_type" "not_null" "$default_value" || handle_error
 
                             if [[ $? -eq 0 ]]; then
                                 chosen_constraints=$(awk -F: -v default_value="$default_value" '{$4=default_value; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)

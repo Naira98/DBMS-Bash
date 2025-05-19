@@ -27,7 +27,7 @@ function ask_for_unique_and_default_constraints {
                     if [[ $chosen_constraints =~ :$ ]]; then
                         read -rp "Enter a default value for $col_name: " default_value
 
-                        validate_data_type $default_value $data_type
+                        validate_data_type $data_type "not_null" $default_value
                         first_validation=$?
 
                         validate_no_colon_or_newlines $default_value
