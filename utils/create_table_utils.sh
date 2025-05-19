@@ -102,7 +102,7 @@ function ask_for_auto_increment {
     local col_name="$1"
 
     echo > /dev/stderr
-    read -rp "Do you want column '$col_name' to be auto-incremented ? (y/n): " answer
+    read -rp "Do you want column '$col_name' to be auto_incremented ? (y/n): " answer
 
     if [[ "$answer" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$answer" == "" ]]; then
         echo "auto_increment"
@@ -118,7 +118,8 @@ function ask_for_all_constraints {
     local table_data_path=$4
     local col_num=$5
 
-    # pk:unique:not_null:default
+    # pk:unique:not_null:auto_increment
+    # :unique:not_null:default
     if [[ -n $old_constraints ]]; then
         local chosen_constraints=$old_constraints
     else
@@ -128,13 +129,21 @@ function ask_for_all_constraints {
     while true; do
         unique_marker=$(awk -F: '{if ($2 == "unique") print "*"; else print " "}' <<< $chosen_constraints)
         not_null_marker=$(awk -F: '{if ($3 == "not_null") print "*"; else print " "}' <<< $chosen_constraints)
-        default_marker=$(awk -F: '{if ($4 != "") print "*"; else print " "}' <<< $chosen_constraints)
+
+        # Last choice is either auto_increment in pk column or default value in any column else
+        if [[ $col_num -eq 1 ]]; then
+            auto_increment_marker=$(awk -F: '{if ($4 != "") print "*"; else print " "}' <<< $chosen_constraints)
+            last_choice="[$auto_increment_marker] auto_increment"
+        else
+            default_marker=$(awk -F: '{if ($4 != "") print "*"; else print " "}' <<< $chosen_constraints)
+            last_choice="[$default_marker] default"
+        fi
         
         echo > /dev/stderr
         echo "Constraints" > /dev/stderr
         echo "-----------" > /dev/stderr
 
-        select constraint in "[$unique_marker] unique" "[$not_null_marker] not null" "[$default_marker] default" "# Done"; do
+        select constraint in "[$unique_marker] unique" "[$not_null_marker] not null" "$last_choice" "# Done"; do
             case $REPLY in
                 1) #unique
                     if [[ $chosen_constraints == *:unique:* ]]; then
@@ -208,10 +217,10 @@ function ask_for_all_constraints {
                     fi
                     ;;
 
-                3) #default
+                3) #default value or auto_increment
                     if [[ $chosen_constraints =~ :$ ]]; then
                         if [[ $col_num -eq 1 ]]; then
-                            print_red "Error: You can't add default value for the primary key '$col_name'."
+                            chosen_constraints=$(awk -F: '{$4="auto_increment"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
                         else
                             read -rp "Enter a default value for $col_name: " default_value
 
