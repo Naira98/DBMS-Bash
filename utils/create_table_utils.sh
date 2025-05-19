@@ -220,7 +220,11 @@ function ask_for_all_constraints {
                 3) #default value or auto_increment
                     if [[ $chosen_constraints =~ :$ ]]; then
                         if [[ $col_num -eq 1 ]]; then
-                            chosen_constraints=$(awk -F: '{$4="auto_increment"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                            if [[ $data_type = 'integer' ]]; then
+                                chosen_constraints=$(awk -F: '{$4="auto_increment"; print $1":"$2":"$3":"$4}' <<< $chosen_constraints)
+                            else
+                                print_red "Error: You can't add auto_increment constraint to "$data_type" primary key '$col_name'."
+                            fi
                         else
                             read -rp "Enter a default value for $col_name: " default_value
 
