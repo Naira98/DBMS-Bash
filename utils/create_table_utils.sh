@@ -2,7 +2,7 @@
 
 source ./utils/validate_utils.sh
 source ./utils/validate_constraints_utils.sh
-source ./utils/validate_table_data_utils.sh
+source ./utils/validate_data_type_utils.sh
 source ./utils/output_utils.sh
 source ./utils/constants.sh
 
@@ -96,6 +96,17 @@ function ask_for_data_type {
             esac
         done
     done
+}
+
+function ask_for_auto_increment {
+    local col_name="$1"
+
+    echo > /dev/stderr
+    read -rp "Do you want column '$col_name' to be auto-incremented ? (y/n): " answer
+
+    if [[ "$answer" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$answer" == "" ]]; then
+        echo "auto_increment"
+    fi
 }
 
 function ask_for_all_constraints {

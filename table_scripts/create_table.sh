@@ -24,7 +24,10 @@ while true; do
         col_metadata="$col_name":"$data_type":
         
         if (( $i == 1 )); then
-            col_metadata="$col_metadata"pk:unique:not_null:
+            if [[ $data_type = "integer" ]]; then
+                auto_increment=$(ask_for_auto_increment "$col_name")
+            fi
+            col_metadata="$col_metadata"pk:unique:not_null:$auto_increment
         else
             constraints=$(ask_for_all_constraints $col_name $data_type "" "" "")
             
