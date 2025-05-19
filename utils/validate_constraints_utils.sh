@@ -67,3 +67,11 @@ function validate_constraints {
     fi
 }
 
+function get_next_pk {
+    local table_data_path=$1
+
+    max=$(awk -F : '{if($1 > max) max=$1} END{print max}' $table_data_path)
+
+    echo $(($max + 1)) 
+}
+

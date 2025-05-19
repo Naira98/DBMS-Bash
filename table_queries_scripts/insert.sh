@@ -24,16 +24,22 @@ while true; do
     printf '%*s\n' "${#quote}" '' | tr ' ' '-' > /dev/stderr
 
     for ((i = 0; i < ${#columns[@]}; i++)); do
-        default_value=$(awk -F: '{if ($4 != "") print $4}' <<< "${constraints[$i]}")
+        default_value_or_auto_increment=$(awk -F: '{if ($4 != "") print $4}' <<< "${constraints[$i]}")
 
         while true; do
-            if [[ -z "$default_value" ]]; then
+            if [[ -z "$default_value_or_auto_increment" ]]; then
                 read -rp "${columns[$i]}: " input
             else
-                read -rp "${columns[$i]} ($default_value): " input
+                read -rp "${columns[$i]} ($default_value_or_auto_increment): " input
 
                 if [[ -z "$input" ]]; then
-                    input="$default_value"
+                    # PK with auto increment
+                    if [[ $i -eq 0 && "$default_value_or_auto_increment" = "auto_increment" ]]; then
+                        input=$(get_next_pk "$table_data_path")
+                    else
+                    # Normal column with default value
+                        input="$default_value_or_auto_increment"
+                    fi
                 fi
             fi
 
@@ -56,14 +62,13 @@ while true; do
     print_green "(+1) Row inserted successfully"
     echo "$row" >> "$table_data_path"
 
+    echo
     read -rp $'Do you want to insert more values (y/n)? ' confirm
 
     if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
+        row=""
         continue
     fi
 
     break
 done
-
-
-# TODO pk auto increment
