@@ -15,8 +15,8 @@ function validate_data_type {
 
     case $data_type in
         "integer")
-            if [[ ! "$input" =~ ^-?[0-9]+$ ]]; then
-                print_red "Error: Value must be an integer."
+            if [[ ! "$input" =~ ^-?[1-9][0-9]*$ && "$input" != "0" ]]; then
+                print_red "Error: Value must be a valid integer (no leading zeros, no -0)."
                 return 1
             fi
             ;;
