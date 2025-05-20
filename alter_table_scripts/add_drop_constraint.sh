@@ -14,11 +14,12 @@ BEGIN { OFS = ":" }
 {
     if (NR == col_num) {
         $3 = new_constraints
-        $4 = ""
-        for (i = 5; i <= NF; i++) $i = ""
-        sub(/:::$/, "")  # Remove trailing colon
+        for (i = 4; i <= NF; i++) $i = ""
+        print $1, $2, $3
+    } else {
+        print $0
     }
-    print $0
-}' "$table_metadata_path" > "${table_metadata_path}.tmp" && mv "${table_metadata_path}.tmp" "$table_metadata_path"
+}
+' "$table_metadata_path" > "${table_metadata_path}.tmp" && mv "${table_metadata_path}.tmp" "$table_metadata_path"
 
 print_green "Column '$col_name' constraints altered successfully."
