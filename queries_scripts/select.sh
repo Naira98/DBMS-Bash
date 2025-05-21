@@ -18,7 +18,7 @@ while true; do
                 matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
                 if [[ "$matched_rows_length" -eq 0 ]]; then
-                    echo_red "Error: There is no matched rows to select"
+                    echo_red "Error: There is no matched records to select"
                     exit 1
                 fi
                 
@@ -46,7 +46,7 @@ while true; do
                 matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
                 if [[ "$matched_rows_length" -eq 0 ]]; then
-                    echo_red "Error: There is no matched rows to select"
+                    echo_red "Error: There is no matched records to select"
                     exit 1
                 fi
 
@@ -57,7 +57,7 @@ while true; do
                 print_table "$content"
 
                 echo
-                read -rp $'Do you want to select more values? (y/n): ' confirm
+                read -rp $'Do you want to select more records? (y/n): ' confirm
 
                 if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
                     row=""

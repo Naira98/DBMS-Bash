@@ -16,11 +16,11 @@ while true; do
     deleted_count=$(( "$lines_count_before_deletion" - "$lines_count_after_deletion" ))
  
     if [[ $deleted_count -eq 0 ]]; then
-        echo_green "No matched rows to delete"
+        echo_green "No matched records to delete"
     elif [[ "$deleted_count" -gt 1 ]]; then
-        echo_green "(-$deleted_count) rows deleted successfully"
+        echo_green "(-$deleted_count) records deleted successfully"
     elif [[ "$deleted_count" -eq 1 ]]; then
-        echo_green "(-1) row deleted successfully"
+        echo_green "(-1) record deleted successfully"
     fi
 
     echo
