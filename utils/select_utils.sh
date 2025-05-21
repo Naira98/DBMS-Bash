@@ -9,13 +9,13 @@ function select_from_databases {
     local dbs=($(ls -F ./$WORK_SPACE | grep '/$' | sed 's/\/$//'))
 
     if [[ ${#dbs[@]} -eq 0 ]]; then
-        echo_red "There's no databases to $reason"
+        echo_red "Error: There's no databases to $reason"
         return 1
     fi
 
     echo > /dev/stderr
     echo 'Choose a database:' > /dev/stderr
-    echo '------------------' > /dev/stderr
+    echo '━━━━━━━━━━━━━━━━━━' > /dev/stderr
 
     select chosen_db in "${dbs[@]}"; do
         if [[ -n $chosen_db ]]; then
@@ -36,13 +36,13 @@ function select_from_tables {
     local tables=($(ls ./$WORK_SPACE/$CONNECTED_DB))
 
     if [[ ${#tables[@]} -eq 0 ]]; then
-        echo_red "There's no tables to $reason"
+        echo_red "Error: There's no tables to $reason"
         return 1
     fi
 
     echo > /dev/stderr
     echo 'Choose a table:' > /dev/stderr
-    echo '------------------' > /dev/stderr
+    echo '━━━━━━━━━━━━━━━' > /dev/stderr
 
     select chosen_table in "${tables[@]}"; do
         if [[ -n $chosen_table ]]; then
@@ -65,7 +65,7 @@ function select_from_columns {
 
     echo > /dev/stderr
     echo 'Choose a column:' > /dev/stderr
-    echo '----------------' > /dev/stderr
+    echo '━━━━━━━━━━━━━━━━' > /dev/stderr
 
     select chosen_col in ${columns[@]}; do
         if [[ -n $chosen_col ]]; then

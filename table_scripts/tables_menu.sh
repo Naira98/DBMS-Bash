@@ -11,7 +11,7 @@ fi
 
 while true; do
     echo
-    echo "================== Tables Menu =================="
+    echo "═══════════ Tables Menu ═══════════"
     select choice in "Create Table" "List Tables" "Queries on Table" "Alter Table" "Drop Table" "Back To Main Menu" "Exit"
     do
         case $choice in
