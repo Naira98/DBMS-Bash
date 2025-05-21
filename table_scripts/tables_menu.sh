@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 export CONNECTED_DB=$1
 PS3="${CONNECTED_DB}_db >> "

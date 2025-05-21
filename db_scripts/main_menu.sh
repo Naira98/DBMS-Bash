@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 source ./utils/output_utils.sh
 source ./utils/confirm_exit_utils.sh

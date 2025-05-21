@@ -1,7 +1,6 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 set -e
-source ./utils/constants.sh
 
 workspace_path="./$WORK_SPACE"
 

@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 shopt -s extglob
 source ./utils/output_utils.sh

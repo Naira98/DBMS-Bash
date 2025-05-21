@@ -1,6 +1,5 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
-source ./utils/constants.sh
 
 function select_from_databases {
     local reason=$1

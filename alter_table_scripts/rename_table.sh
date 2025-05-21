@@ -1,10 +1,9 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 set -e
 
 source ./utils/output_utils.sh
 source ./utils/validate_utils.sh
-source ./utils/constants.sh
 
 echo
 read -rp "Enter the new name for '$table_name' table: " new_name

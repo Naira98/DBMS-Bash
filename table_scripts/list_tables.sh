@@ -1,7 +1,6 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 source ./utils/output_utils.sh
-source ./utils/constants.sh
 
 tables_path="./$WORK_SPACE/$CONNECTED_DB"
 

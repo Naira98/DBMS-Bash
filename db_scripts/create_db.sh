@@ -1,10 +1,9 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 set -e
 
 source ./utils/output_utils.sh
 source ./utils/validate_utils.sh
-source ./utils/constants.sh
 
 echo
 read -rp "Enter the name of the database you want to create: " db_name

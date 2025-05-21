@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 source ./utils/output_utils.sh
 source ./utils/select_from_columns_utils.sh

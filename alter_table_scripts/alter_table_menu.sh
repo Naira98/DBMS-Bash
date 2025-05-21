@@ -1,7 +1,6 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 source ./utils/select_from_tables_utils.sh
-source ./utils/constants.sh
 source ./utils/output_utils.sh
 
 export table_name=$(select_from_tables "alter")

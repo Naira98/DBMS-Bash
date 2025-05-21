@@ -1,10 +1,9 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 source ./utils/validate_utils.sh
 source ./utils/validate_constraints_utils.sh
 source ./utils/validate_data_type_utils.sh
 source ./utils/output_utils.sh
-source ./utils/constants.sh
 
 function ask_for_table_name {
     while true; do
