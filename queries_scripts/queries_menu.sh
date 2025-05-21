@@ -16,16 +16,16 @@ while true; do
     do
         case $choice in
             "Select")
-                ./table_queries_scripts/select.sh
+                ./queries_scripts/select.sh
                 ;;
             "Insert")
-                ./table_queries_scripts/insert.sh
+                ./queries_scripts/insert.sh
                 ;;
             "Update")
-                ./table_queries_scripts/update.sh 
+                ./queries_scripts/update.sh 
                 ;;
             "Delete")
-                ./table_queries_scripts/delete.sh 
+                ./queries_scripts/delete.sh 
                 ;;
             "Back To Tables Menu")
                 exit 0
