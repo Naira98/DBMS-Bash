@@ -19,7 +19,7 @@ while true; do
                 ./table_scripts/list_tables.sh
                 ;;
             "Queries on Table")
-                ./table_queries_scripts/queries_menu.sh
+                ./queries_scripts/queries_menu.sh
                 ;;
             "Alter Table")
                 ./alter_table_scripts/alter_table_menu.sh 
