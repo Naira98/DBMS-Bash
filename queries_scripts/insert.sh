@@ -57,7 +57,7 @@ while true; do
         done
     done
 
-    echo_green "(+1) Row inserted successfully"
+    echo_green "(+1) record inserted successfully"
     echo "$row" >> "$table_data_path"
 
     echo
