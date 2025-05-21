@@ -287,17 +287,17 @@ function get_table_headers {
     local col_nums=$1
 
     if [[ $col_nums = "all" ]]; then
-        local headers=$(awk -F: '{print $1}' "$table_metadata_path" | paste -sd:)
+        local headers=$(awk -F: 'BEGIN {ORS=":"} {print $1}' "$table_metadata_path" | sed 's/:$//')
     else
         local headers=$(awk -F: -v col_nums="$col_nums" '
-        {
+        BEGIN {ORS=":"} {
             split(col_nums, cols_array, " ")
             for (i in cols_array) {
                 if (NR == cols_array[i]) {
                     print $1
                 }
             }
-        }' "$table_metadata_path" | paste -sd:)
+        }' "$table_metadata_path" | sed 's/\:$//')
     fi
     echo "$headers"
 }
