@@ -143,9 +143,11 @@ function ask_for_all_constraints {
             last_choice="[$default_marker] default"
         fi
         
+        quote="Constraints for '$col_name' column"
+        
         echo > /dev/stderr
-        echo "Constraints" > /dev/stderr
-        echo "-----------" > /dev/stderr
+        echo "$quote" > /dev/stderr
+        printf '%*s\n' "${#quote}" '' | tr ' ' '-' > /dev/stderr
 
         select constraint in "[$unique_marker] unique" "[$not_null_marker] not null" "$last_choice" "# Done"; do
             case $REPLY in
