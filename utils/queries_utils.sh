@@ -21,6 +21,8 @@ function ask_for_some_columns {
         done
 
         echo > /dev/stderr
+        echo "SELECT col_names" > /dev/stderr
+        echo "----------------" > /dev/stderr
         select option in "${menu_cols[@]}" "# done"; do
             case $REPLY in
                 [1-${#menu_cols[@]}])
