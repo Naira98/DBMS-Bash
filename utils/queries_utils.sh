@@ -212,8 +212,8 @@ function ask_for_condition {
                     if [[ $col_data_type = "integer" ]]; then
                         while true; do
                             echo > /dev/stderr
-                            echo "Select comparison arithmetic operator" > /dev/stderr
-                            echo "-------------------------------------" > /dev/stderr
+                            echo "Choose comparison arithmetic operator" > /dev/stderr
+                            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" > /dev/stderr
                             select operator in "=" "!=" ">" ">=" "<" "<=" "IS NULL" "IS NOT NULL"; do
                                 case $REPLY in
                                     [1-8]) # All 8 operators

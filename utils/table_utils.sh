@@ -48,7 +48,6 @@ function ask_for_col_name {
     local col_num=$3
 
     while true; do
-┏   ┓   ━   ┃ ┗┗┛
         if (( $col_num == 1 )); then
             echo > /dev/stderr
             echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" > /dev/stderr
@@ -77,10 +76,12 @@ function ask_for_data_type {
     PS3="Select column data type >> "
     local col_name=$1
 
+    quote="Data Type for '$col_name' column"
+        
     while true; do
         echo > /dev/stderr
-        echo "Data Type" > /dev/stderr
-        echo "---------" > /dev/stderr
+        echo "$quote" > /dev/stderr
+        printf '%*s\n' "${#quote}" '' | tr ' ' '-' > /dev/stderr
         select data_type in "integer" "string" "boolean"; do
             case $data_type in
                 integer|string|boolean)

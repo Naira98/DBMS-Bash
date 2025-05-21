@@ -7,15 +7,15 @@ tables=$(ls $tables_path)
 
 echo
 if [[ -z $tables ]]; then
-    echo "================== Tables =================="
+    echo "================= Tables ================="
     echo "No tables found in '$CONNECTED_DB' database"
-    echo "============================================"
+    echo "=========================================="
 
 
 else
-    echo "================== Tables =================="
+    echo "================= Tables ================="
     for table in $tables; do
         echo " - $table"
     done
-    echo "============================================"
+    echo "=========================================="
 fi

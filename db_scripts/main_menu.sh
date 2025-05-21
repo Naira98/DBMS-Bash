@@ -10,7 +10,7 @@ echo "╚═══════════════════════�
 
 while true; do
     echo
-    echo "================== Main Menu =================="
+    echo "════════════ Main Menu ════════════"
     select choice in "Create Database" "List Database" "Connect Database" "Drop Database" "Exit"
     do
         case $choice in
@@ -39,8 +39,6 @@ while true; do
                 echo_red "Invalid option. Please try again."
                 ;;
         esac
-        
-        # break main_menu select loop
         break
     done
 done

@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 set -e
 source ./utils/queries_utils.sh
+source ./utils/validation_utils.sh
 
 columns=()
 types=()

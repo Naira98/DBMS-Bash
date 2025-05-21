@@ -8,15 +8,15 @@ dbs=$(ls -F $workspace_path | grep '/$' | sed 's/\/$//')
 
 echo
 if [[ -z $dbs ]]; then
-    echo "================== Databases =================="
+    echo "================= Databases ================="
     echo "No databases found in $workspace_path"
-    echo "==============================================="
+    echo "============================================="
 
 else
-    echo "================== Databases =================="
+    echo "================= Databases ================="
     for db in $dbs; do
         echo " - $db"
     done
-    echo "==============================================="
+    echo "============================================="
 
 fi

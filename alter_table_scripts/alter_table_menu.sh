@@ -14,7 +14,7 @@ PS3="Choose an option >> "
 
 while true; do
     echo
-    echo "============== Alter Table $table_name =============="
+    echo "═══════════ Alter Table $table_name ═══════════"
     select option in "Rename Table" "Add Column" "Rename Column" "Drop Column" "Add Or Drop Constraint" "Back to Tables Menu"; do
         case $option in
             "Rename Table")
