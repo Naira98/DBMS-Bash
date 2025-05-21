@@ -17,7 +17,7 @@ function validate_new_and_stored_data_are_unique {
     ' "$table_data_path"
 
     if [[ $? -ne 0 ]]; then
-        print_red "Error: Duplicate value violates unique constraint"
+        print_red "Error: There are duplicate values violate unique constraint"
         return 1
     fi
 
