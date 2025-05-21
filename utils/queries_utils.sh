@@ -264,9 +264,9 @@ function ask_for_condition {
                             echo > /dev/stderr
                             echo "Select comparison operator" > /dev/stderr
                             echo "--------------------------" > /dev/stderr
-                            select operator in "=" "IS NULL" "IS NOT NULL"; do
+                            select operator in "=" "!=" "IS NULL" "IS NOT NULL"; do
                                 case $REPLY in
-                                    [1-3])
+                                    [1-4])
                                         if [[ "$operator" = "IS NULL" || "$operator" = "IS NOT NULL" ]]; then
                                             value=""
                                             if [[ "$operator" = "IS NULL" ]]; then
@@ -276,8 +276,7 @@ function ask_for_condition {
                                             fi
 
                                         else
-                                            local value=$(read_condition "$col_name" "=")
-                                            operator="="
+                                            local value=$(read_condition "$col_name" "$operator")
                                         fi
 
                                         if [[ "$reason" = "delete" ]]; then
