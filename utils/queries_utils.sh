@@ -215,21 +215,32 @@ function ask_for_condition {
                             echo > /dev/stderr
                             echo "Select comparison arithmetic operator" > /dev/stderr
                             echo "-------------------------------------" > /dev/stderr
-                            select operator in "=" "!=" ">" ">=" "<" "<="; do
+                            select operator in "=" "!=" ">" ">=" "<" "<=" "IS NULL" "IS NOT NULL"; do
                                 case $REPLY in
-                                    [1-6]) # All 6 operators
-                                        local value=$(read_condition "$col_name" "$operator")
+                                    [1-8]) # All 8 operators
 
-                                        if [[ $operator = ">" || $operator = ">=" || $operator = "<" || $operator = "<=" ]]; then
-                                            if [[ -z "$value" ]]; then
-                                                print_red "Invalid input: Value with this operator can't be empty."
+                                        if [[ "$operator" = "IS NULL" || "$operator" = "IS NOT NULL" ]]; then
+                                            value=""
+                                            if [[ "$operator" = "IS NULL" ]]; then
+                                                operator="="
+                                            else
+                                                operator="!="
+                                            fi
+
+                                        else
+                                            local value=$(read_condition "$col_name" "$operator")
+
+                                            if [[ $operator = ">" || $operator = ">=" || $operator = "<" || $operator = "<=" ]]; then
+                                                if [[ -z "$value" ]]; then
+                                                    print_red "Invalid input: Value with this operator can't be empty."
+                                                    break
+                                                fi
+                                            fi
+
+                                            if ! [[ -z "$value" || "$value" =~ ^-?[0-9]+$ ]]; then
+                                                print_red "Invalid input: Value must be a number."
                                                 break
                                             fi
-                                        fi
-
-                                        if ! [[ -z "$value" || "$value" =~ ^-?[0-9]+$ ]]; then
-                                            print_red "Invalid input: Value must be a number."
-                                            break
                                         fi
 
                                         if [[ "$reason" = "delete" ]]; then
@@ -249,17 +260,44 @@ function ask_for_condition {
                             done
                         done
                     else 
-                        local value=$(read_condition "$col_name" "=")
+                        while true; do
+                            echo > /dev/stderr
+                            echo "Select comparison operator" > /dev/stderr
+                            echo "--------------------------" > /dev/stderr
+                            select operator in "=" "IS NULL" "IS NOT NULL"; do
+                                case $REPLY in
+                                    [1-3])
+                                        if [[ "$operator" = "IS NULL" || "$operator" = "IS NOT NULL" ]]; then
+                                            value=""
+                                            if [[ "$operator" = "IS NULL" ]]; then
+                                                operator="="
+                                            else
+                                                operator="!="
+                                            fi
 
-                        if [[ "$reason" = "delete" ]]; then
-                            $(delete_matched_rows "$value" "=")
-                            return 0
-                        fi
+                                        else
+                                            local value=$(read_condition "$col_name" "=")
+                                            operator="="
+                                        fi
 
-                        local matched_rows=$(get_matched_rows "$value" "=" "false")
+                                        if [[ "$reason" = "delete" ]]; then
+                                            $(delete_matched_rows "$value" "$operator")
+                                            return 0
+                                        fi
 
-                        echo "$matched_rows"
-                        return 0
+                                        local matched_rows=$(get_matched_rows "$value" "$operator" "false")
+
+                                        echo "$matched_rows"
+                                        return 0
+                                        ;;
+                                    *)
+                                        print_red "Invalid option. Please try again."
+                                        ;;
+                                esac
+                                break
+                            done
+
+                        done
                     fi
 
                 ;;
