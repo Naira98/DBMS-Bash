@@ -1,17 +1,13 @@
 #!/usr/bin/bash
-
 set -e
-
 source ./utils/output_utils.sh
-source ./utils/validate_utils.sh
+source ./utils/validation_utils.sh
 
 echo
 read -rp "Enter the new name for '$table_name' table: " new_name
 
-# Input Validation
 new_name=$(validate_name "$new_name" "Table") 
 
-# Existence Validation
 new_table_data_path="./$WORK_SPACE/$CONNECTED_DB/$new_name"
 new_table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$new_name"
 
@@ -25,4 +21,4 @@ table_name="$new_name"
 table_data_path="$new_table_data_path"
 table_metadata_path="$new_table_metadata_path"
 
-print_green "Table renamed successfully to '$new_name'."
+echo_green "Table renamed successfully to '$new_name'."

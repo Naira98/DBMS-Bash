@@ -1,10 +1,8 @@
 #!/usr/bin/bash
 set -e
-
 source ./utils/output_utils.sh
 source ./utils/queries_utils.sh
-source ./utils/validate_data_type_utils.sh
-source ./utils/validate_constraints_utils.sh
+source ./utils/validation_utils.sh
 
 PS3="Choose an option: "
 
@@ -24,7 +22,7 @@ matched_rows=$(ask_for_condition "all" "update" "$query")
 matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
 if [[ "$matched_rows_length" -eq 0 ]]; then
-    print_red "Error: There is no matched rows to update"
+    echo_red "Error: There is no matched rows to update"
     exit 1
 fi
 
@@ -68,7 +66,7 @@ while true; do
                     unique_constraint=$(cut -d: -f2 <<< "${constraints[$col_index]}")
 
                     if [[ $unique_constraint = "unique" && $matched_rows_length -gt 1 ]]; then
-                        print_red "Error: There is a unique constraint. you can't update multiple rows with the same value"
+                        echo_red "Error: There is a unique constraint. you can't update multiple rows with the same value"
                         break
                     fi
 
@@ -119,16 +117,16 @@ while true; do
                 ' "$table_data_path" > "${table_data_path}.tmp" && mv "${table_data_path}.tmp" "$table_data_path"
 
                 if [[ "$matched_rows_length" -gt 1 ]]; then
-                    print_green "(+$matched_rows_length) rows updated successfully"
+                    echo_green "(+$matched_rows_length) rows updated successfully"
                 elif [[ "$matched_rows_length" -eq 1 ]]; then
-                    print_green "(+1) row updated successfully"
+                    echo_green "(+1) row updated successfully"
                 fi
 
                 exit 0
                 ;;
 
             *)
-                print_red "Invalid option. Please try again."
+                echo_red "Invalid option. Please try again."
                 ;;
         esac
         break

@@ -1,5 +1,4 @@
 #!/usr/bin/bash
-
 set -e
 
 workspace_path="./$WORK_SPACE"
