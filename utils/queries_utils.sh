@@ -324,7 +324,7 @@ function print_horizontal_separator() {
             echo -n $box_middle
         fi
 
-        print_horizontal_line $vertical_position $((${columns_lengths[$column]} + 2)) #extra 2 spaces
+        print_horizontal_line $vertical_position $((${columns_lengths[$column]} + 4)) #extra 4 spaces
     done
 
     echo $box_right
@@ -359,8 +359,8 @@ function print_row() {
         else
             prefix=$BOX_VERTICAL
         fi
-    
-        printf "$prefix %-${columns_lengths[$column]}s " "$cell_table_content"
+
+        printf "$prefix %-$(( ${columns_lengths[$column]} + 2 ))s " "$cell_table_content"
     done
 
     echo "$BOX_DOUBLE_VERTICAL"
