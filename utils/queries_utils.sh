@@ -173,7 +173,6 @@ function delete_matched_rows {
     local value=$1
     local operator=$2
 
-    lines_count_before_deletion=$(wc -l < "$table_data_path")
 
     awk -F : -v condition_col_num="$condition_col_num" -v value="$value" -v operator="$operator" '
     {
@@ -190,10 +189,6 @@ function delete_matched_rows {
         }
     }
     ' "$table_data_path" > "${table_data_path}.tmp" && mv "${table_data_path}.tmp" "$table_data_path"
-
-    lines_count_after_deletion=$(wc -l < "$table_data_path")
-
-    echo $(( "$lines_count_before_deletion" - "$lines_count_after_deletion" ))
 
     return 0
 }

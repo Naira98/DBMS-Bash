@@ -28,6 +28,15 @@ while true; do
                 content=$(echo -e "$headers\n$matched_rows")
 
                 print_table "$content"
+
+                echo
+                read -rp $'Do you want to select more values? (y/n): ' confirm
+
+                if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
+                    row=""
+                    break
+                fi
+
                 exit 0
                 ;;
 
@@ -48,6 +57,15 @@ while true; do
                 content=$(echo -e "$headers\n$matched_rows")
 
                 print_table "$content"
+
+                echo
+                read -rp $'Do you want to select more values? (y/n): ' confirm
+
+                if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
+                    row=""
+                    break
+                fi
+
                 exit 0
             
                 ;;

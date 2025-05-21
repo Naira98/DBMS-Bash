@@ -63,7 +63,7 @@ while true; do
     echo "$row" >> "$table_data_path"
 
     echo
-    read -rp $'Do you want to insert more values (y/n)? ' confirm
+    read -rp $'Do you want to insert more values? (y/n): ' confirm
 
     if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
         row=""
