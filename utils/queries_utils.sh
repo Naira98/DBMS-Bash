@@ -26,6 +26,8 @@ function ask_for_some_columns {
                 [1-${#menu_cols[@]}])
                     if [[ " ${chosen_column_nums[@]} " == *" $REPLY "* ]]; then
                         local chosen_column_nums=("${chosen_column_nums[@]/$REPLY}")
+                        # Remove empty elements caused by the above operation
+                        chosen_column_nums=(${chosen_column_nums[@]})
                     else
                         local chosen_column_nums+=("$REPLY")
                     fi
