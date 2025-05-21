@@ -1,7 +1,6 @@
 #! /usr/bin/bash
 
 source ./utils/queries_utils.sh
-source ./utils/select_from_columns_utils.sh
 
 set -e
 

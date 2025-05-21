@@ -19,7 +19,7 @@ row=""
 
 while true; do
     echo
-    quote="Insert values for '"$table_name"' table"
+    quote="INSERT INTO "$table_name" VALUES"
     echo "$quote"
     printf '%*s\n' "${#quote}" '' | tr ' ' '-' > /dev/stderr
 

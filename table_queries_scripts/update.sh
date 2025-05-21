@@ -35,9 +35,11 @@ selected_values=$(printf '0:%.0s' $(seq 1 $((${#columns[@]} - 1))))
 selected_values="${selected_values}0"    # "0:0:0:0"
 
 while true; do
+    quote="UPDATE $table_name SET columns"
+
     echo
-    echo "Columns to update"
-    echo "-----------------"
+    echo "$quote"
+    printf '%*s\n' "${#quote}" '' | tr ' ' '-' > /dev/stderr
 
     options=()
     for ((i = 0; i < "${#columns[@]}"; i++)); do
