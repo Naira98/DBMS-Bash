@@ -30,12 +30,16 @@ function ask_for_number_of_columns {
         echo > /dev/stderr
         read -rp "Enter the number of columns: " cols_num
 
-        if [[ ! $cols_num =~ ^[0-9]+$ ]]; then
-            print_red 'Error: Number of columns must be a number'
+        if [[ ! $cols_num =~ ^-?[0-9]+$ ]]; then
+            print_red 'Error: Number of columns must be a valid number'
             continue
         fi
-        if [[ $cols_num =~ ^0+$ ]]; then
-            print_red 'Error: Number of columns must be a positive number'
+        if (( cols_num < 0 )); then
+            print_red "Error: Number of columns can't be negative"
+            continue
+        fi
+        if (( cols_num == 0 )); then
+            print_red "Error: Number of columns can't be zero"
             continue
         fi
 
