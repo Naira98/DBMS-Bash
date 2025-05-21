@@ -1,15 +1,13 @@
-#! /usr/bin/bash
-
-source ./utils/select_from_tables_utils.sh
-source ./utils/constants.sh
+#!/usr/bin/bash
+source ./utils/select_utils.sh
 source ./utils/output_utils.sh
 
 export table_name=$(select_from_tables "alter")
 export table_data_path="./$WORK_SPACE/$CONNECTED_DB/$table_name"
 export table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
 
-if [[ -z $table_name ]]; then
-    exit 0
+if [[ -z "$table_name" ]]; then
+    exit 1
 fi
 
 PS3="Choose an option >> "
@@ -39,7 +37,7 @@ while true; do
             exit 0
             ;;
             "*")
-                print_red "Invalid option. Please try again."
+                echo_red "Invalid option. Please try again."
             ;;
         esac
         break

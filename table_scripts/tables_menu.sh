@@ -1,10 +1,13 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
+source ./utils/output_utils.sh
+source ./utils/confirmation_utils.sh
 
 export CONNECTED_DB=$1
 PS3="${CONNECTED_DB}_db >> "
 
-source ./utils/output_utils.sh
-source ./utils/confirm_exit_utils.sh
+if [[ -z "$CONNECTED_DB" ]]; then
+    exit 1
+fi
 
 while true; do
     echo
@@ -34,7 +37,7 @@ while true; do
                 confirm_exit 1
                 ;;
             *)
-                print_red "Invalid option. Please try again."
+                echo_red "Invalid option. Please try again."
                 ;;
         esac
         break

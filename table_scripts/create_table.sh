@@ -1,9 +1,7 @@
-#! /usr/bin/bash
-
-shopt -s extglob
+#!/usr/bin/bash
 set -e
-
-source ./utils/create_table_utils.sh
+shopt -s extglob
+source ./utils/table_utils.sh
 source ./utils/output_utils.sh
 
 while true; do
@@ -38,6 +36,6 @@ while true; do
 
     done
 
-    print_green "Table '$table_name' created successfully."
+    echo_green "Table '$table_name' created successfully."
     break
 done

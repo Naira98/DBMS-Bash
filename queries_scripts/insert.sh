@@ -1,9 +1,6 @@
-#! /usr/bin/bash
-
+#!/usr/bin/bash
 set -e
-
-source ./utils/validate_data_type_utils.sh
-source ./utils/validate_constraints_utils.sh
+source ./utils/queries_utils.sh
 
 columns=()
 types=()
@@ -35,7 +32,7 @@ while true; do
                 if [[ -z "$input" ]]; then
                     # PK with auto increment
                     if [[ $i -eq 0 && "$default_value_or_auto_increment" = "auto_increment" ]]; then
-                        input=$(get_next_pk "$table_data_path")
+                        input=$(auto_increment_pk "$table_data_path")
                     else
                     # Normal column with default value
                         input="$default_value_or_auto_increment"
@@ -59,7 +56,7 @@ while true; do
         done
     done
 
-    print_green "(+1) Row inserted successfully"
+    echo_green "(+1) Row inserted successfully"
     echo "$row" >> "$table_data_path"
 
     echo

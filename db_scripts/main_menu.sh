@@ -1,13 +1,12 @@
-#! /usr/bin/bash
-
+#!/usr/bin/bash
 source ./utils/output_utils.sh
-source ./utils/confirm_exit_utils.sh
+source ./utils/confirmation_utils.sh
 
 PS3="Choose an option >> "
 
-echo "  ===========================================================  "
-echo " || Welcome to the Our Database Management System (DBMS) 👋 || "
-echo "  ===========================================================  "
+echo "╔═════════════════════════════════════════════════════════╗"
+echo "║ Welcome to the Our Database Management System (DBMS) 👋 ║ "
+echo "╚═════════════════════════════════════════════════════════╝ "
 
 while true; do
     echo
@@ -16,7 +15,7 @@ while true; do
     do
         case $choice in
             "Create Database")
-                ./db_scripts/create_db.sh || echo
+                ./db_scripts/create_db.sh
                 ;;
             "List Database")
                 ./db_scripts/list_db.sh
@@ -37,7 +36,7 @@ while true; do
                 confirm_exit 0
                 ;;
             *)
-                print_red "Invalid option. Please try again."
+                echo_red "Invalid option. Please try again."
                 ;;
         esac
         

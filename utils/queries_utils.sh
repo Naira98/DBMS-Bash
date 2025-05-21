@@ -1,7 +1,6 @@
-#! /usr/bin/bash
-
+#!/usr/bin/bash
 source ./utils/output_utils.sh
-source ./utils/select_from_columns_utils.sh
+source ./utils/select_utils.sh
 
 function ask_for_some_columns {
     local columns=($(awk -F: '{ print $1 }' "$table_metadata_path"))
@@ -37,7 +36,7 @@ function ask_for_some_columns {
 
                 $((${#menu_cols[@]}+1))) # done
                     if (( ${#chosen_column_nums[@]} < 1 )); then
-                        print_red "Error: You must select at least one column."
+                        echo_red "Error: You must select at least one column."
                     else
                         echo "${chosen_column_nums[@]}"
                         return 0
@@ -45,7 +44,7 @@ function ask_for_some_columns {
                 ;;
 
                 *)
-                    print_red "Invalid option. Please try again."
+                    echo_red "Invalid option. Please try again."
                 ;;
             esac
             break
@@ -232,13 +231,13 @@ function ask_for_condition {
 
                                             if [[ $operator = ">" || $operator = ">=" || $operator = "<" || $operator = "<=" ]]; then
                                                 if [[ -z "$value" ]]; then
-                                                    print_red "Invalid input: Value with this operator can't be empty."
+                                                    echo_red "Invalid input: Value with this operator can't be empty."
                                                     break
                                                 fi
                                             fi
 
                                             if ! [[ -z "$value" || "$value" =~ ^-?[0-9]+$ ]]; then
-                                                print_red "Invalid input: Value must be a number."
+                                                echo_red "Invalid input: Value must be a number."
                                                 break
                                             fi
                                         fi
@@ -253,9 +252,10 @@ function ask_for_condition {
 
                                         echo "${matched_rows[@]}"
                                         return 0
-                                    ;;
+                                        ;;
                                     *)
-                                        print_red "Invalid option. Please try again."
+                                        echo_red "Invalid option. Please try again."
+                                        ;;
                                 esac
                                 break
                             done
@@ -292,7 +292,7 @@ function ask_for_condition {
                                         return 0
                                         ;;
                                     *)
-                                        print_red "Invalid option. Please try again."
+                                        echo_red "Invalid option. Please try again."
                                         ;;
                                 esac
                                 break
@@ -300,8 +300,7 @@ function ask_for_condition {
 
                         done
                     fi
-
-                ;;
+                    ;;
 
                 "No condition")
                     if [[ "$reason" == "delete" ]]; then
@@ -313,11 +312,11 @@ function ask_for_condition {
 
                     echo "$matched_rows" 
                     return 0
-                ;;
+                    ;;
 
                 *)
-                    print_red "Invalid option. Please try again."
-                ;;
+                    echo_red "Invalid option. Please try again."
+                    ;;
             esac
             break
         done
@@ -462,4 +461,13 @@ function print_table {
     done <<< "$table_content"
 
     print_horizontal_separator BOTTOM "${columns_lengths[@]}" 
+}
+
+
+function auto_increment_pk {
+    local table_data_path=$1
+
+    max=$(awk -F : '{if($1 > max) max=$1} END{print max}' $table_data_path)
+
+    echo $(($max + 1)) 
 }

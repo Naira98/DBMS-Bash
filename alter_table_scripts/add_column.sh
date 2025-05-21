@@ -1,8 +1,6 @@
-#! /usr/bin/bash
-
+#!/usr/bin/bash
 set -e
-
-source ./utils/create_table_utils.sh
+source ./utils/table_utils.sh
 source ./utils/output_utils.sh
 
 col_num=$(( $(wc -l < "$table_metadata_path") + 1 ))
@@ -20,4 +18,4 @@ echo ."$col_metadata".
 echo "$col_metadata" >> "$table_metadata_path"
 
 
-print_green "Column '$col_name' added to '$table_name' table successfully."
+echo_green "Column '$col_name' added to '$table_name' table successfully."

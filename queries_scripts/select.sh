@@ -1,8 +1,6 @@
-#! /usr/bin/bash
-
-source ./utils/queries_utils.sh
-
+#!/usr/bin/bash
 set -e
+source ./utils/queries_utils.sh
 
 PS3="Choose an option: "
 
@@ -20,7 +18,7 @@ while true; do
                 matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
                 if [[ "$matched_rows_length" -eq 0 ]]; then
-                    print_red "Error: There is no matched rows to select"
+                    echo_red "Error: There is no matched rows to select"
                     exit 1
                 fi
                 
@@ -48,7 +46,7 @@ while true; do
                 matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
                 if [[ "$matched_rows_length" -eq 0 ]]; then
-                    print_red "Error: There is no matched rows to select"
+                    echo_red "Error: There is no matched rows to select"
                     exit 1
                 fi
 
@@ -67,10 +65,9 @@ while true; do
                 fi
 
                 exit 0
-            
                 ;;
             *)
-                print_red "Invalid option. Please try again."
+                echo_red "Invalid option. Please try again."
                 ;;
         esac
         break

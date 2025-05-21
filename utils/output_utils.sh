@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 RED="\033[0;31m"
 GREEN="\033[0;32m"
@@ -14,22 +14,17 @@ function type_writer {
     echo
 }
 
-function print_green {
+function echo_green {
     local message=$@
     echo -e "${GREEN}$message${NC}" > /dev/stderr
 }
 
-function print_red {
+function echo_red {
     local message=$@
     echo -e "${RED}$message${NC}" > /dev/stderr
 }
 
-function print_blue {
+function echo_blue {
     local message=$@
     echo -e "${BLUE}$message${NC}" > /dev/stderr
 }
-
-# function clear_after_1.5_sec {
-#     sleep 1.5
-#     clear
-# }

@@ -1,8 +1,6 @@
-#! /usr/bin/bash
-
-source ./utils/queries_utils.sh
-
+#!/usr/bin/bash
 set -e
+source ./utils/queries_utils.sh
 
 PS3="Choose an option: "
 
@@ -18,11 +16,11 @@ while true; do
     deleted_count=$(( "$lines_count_before_deletion" - "$lines_count_after_deletion" ))
  
     if [[ $deleted_count -eq 0 ]]; then
-        print_green "No matched rows to delete"
+        echo_green "No matched rows to delete"
     elif [[ "$deleted_count" -gt 1 ]]; then
-        print_green "(-$deleted_count) rows deleted successfully"
+        echo_green "(-$deleted_count) rows deleted successfully"
     elif [[ "$deleted_count" -eq 1 ]]; then
-        print_green "(-1) row deleted successfully"
+        echo_green "(-1) row deleted successfully"
     fi
 
     echo

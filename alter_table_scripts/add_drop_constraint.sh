@@ -1,9 +1,7 @@
-#! /usr/bin/bash
-
+#!/usr/bin/bash
 set -e
-
-source ./utils/select_from_columns_utils.sh
-source ./utils/create_table_utils.sh
+source ./utils/select_utils.sh
+source ./utils/table_utils.sh
 
 read col_name col_num col_data_type col_constraints <<< "$(select_from_columns "add or drop constraints from" "${table_metadata_path}")"
 
@@ -22,4 +20,4 @@ BEGIN { OFS = ":" }
 }
 ' "$table_metadata_path" > "${table_metadata_path}.tmp" && mv "${table_metadata_path}.tmp" "$table_metadata_path"
 
-print_green "Column '$col_name' constraints altered successfully."
+echo_green "Column '$col_name' constraints altered successfully."
