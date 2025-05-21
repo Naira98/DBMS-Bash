@@ -39,10 +39,10 @@ cd DBMS-Bash
   - Add or drop constraints (e.g., `UNIQUE`, `NOT NULL`, `AUTO-INCREMENT PK`, `DEFAULT VALUE` )  
 
 ### Query Operations
-- `SELECT` (supports conditions)  
-- `INSERT` into tables  
+- `SELECT` display data in a well-formatted dynamic table
+- `INSERT` new records into tables  
 - `UPDATE` existing records  
-- `DELETE` records based on conditions  
+- `DELETE` records based on conditions 
 
 ---
 
