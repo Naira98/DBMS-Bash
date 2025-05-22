@@ -9,12 +9,6 @@ source ./utils/output_utils.sh
 
 clear
 
-# Display animated welcome message
-# echo "=============================================="
-# type_writer "🗃️  Welcome to Mohamed & Naira's DBMS Shell"
-# type_writer "🕒  Started at: $(date)"
-# echo "=============================================="
-
 if [[ ! -d $WORK_SPACE ]]; then
     mkdir -p ./$WORK_SPACE
 fi

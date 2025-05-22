@@ -8,7 +8,7 @@ while true; do
 
     read table_name table_path table_metadata_path <<< $(ask_for_table_name)
 
-   cols_num=$(ask_for_number_of_columns)
+    cols_num=$(ask_for_number_of_columns)
 
     touch "$table_path"
     touch "$table_metadata_path"
