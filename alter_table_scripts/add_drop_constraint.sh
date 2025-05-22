@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 set -e
-source ./utils/select_utils.sh
+source ./utils/selection_utils.sh
 source ./utils/table_utils.sh
 
 read col_name col_num col_data_type col_constraints <<< "$(select_from_columns "add or drop constraints from" "${table_metadata_path}")"

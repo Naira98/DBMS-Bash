@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-source ./utils/select_utils.sh
+source ./utils/selection_utils.sh
 source ./utils/output_utils.sh
 
 export table_name=$(select_from_tables "alter")
