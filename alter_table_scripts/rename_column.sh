@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 set -e
-source ./utils/select_utils.sh
+source ./utils/selection_utils.sh
 source ./utils/table_utils.sh
 source ./utils/output_utils.sh
 

@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 source ./utils/output_utils.sh
-source ./utils/select_utils.sh
+source ./utils/selection_utils.sh
 
 export table_name=$(select_from_tables "query on")
 export table_data_path="./$WORK_SPACE/$CONNECTED_DB/$table_name"

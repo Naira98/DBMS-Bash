@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 source ./utils/output_utils.sh
-source ./utils/select_utils.sh
+source ./utils/selection_utils.sh
 
 function ask_for_some_columns {
     local columns=($(awk -F: '{ print $1 }' "$table_metadata_path"))
