@@ -14,7 +14,7 @@ constraints=$(ask_for_all_constraints $col_name $data_type "::::" "$table_data_p
 col_metadata="$col_name":"$data_type":"$constraints"
 
 sed -i 's/$/:/' "$table_data_path"
-echo ."$col_metadata".
+
 echo "$col_metadata" >> "$table_metadata_path"
 
 

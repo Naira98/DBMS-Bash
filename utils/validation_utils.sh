@@ -10,26 +10,27 @@ function validate_name {
 
     # Check if the input is empty
     if [[ -z "$input" ]]; then
-        echo_red "Error: ${type} name can't be empty. Please try again"
+        echo_red "Error: ${type} name can't be empty. Please try again."
         return 1
     fi
 
     # Check if the input starts with a number or contains invalid characters
     if [[ $input =~ ^[0-9] ]]; then
-        echo_red "Error: ${type} name can't start with a number. Please try again"
+        echo_red "Error: ${type} name can't start with a number. Please try again."
         return 1
     elif [[ ! $input =~ ^[a-zA-Z0-9_]+$ ]]; then
-        echo_red "Error: ${type} name can only contain alphanumeric characters and underscores. Please try again"
+        echo_red "Error: ${type} name can only contain alphanumeric characters and underscores. Please try again."
         return 1
     fi
 
     # Check if the input is too long
     if [[ ${#input} -gt 64 ]]; then
-        echo_red "Error: ${type} name is too long. Maximum length is 64 characters. Please try again"
+        echo_red "Error: ${type} name is too long. Maximum length is 64 characters. Please try again."
         return 1
     fi
 
-    echo $input
+    echo "$input"
+
     return 0
 }
 
@@ -42,6 +43,7 @@ function validate_dir_does_not_exist {
         echo_red "$error_message"
         return 1
     fi
+
     return 0
 }
 
@@ -54,6 +56,7 @@ function validate_file_does_not_exist {
         echo_red "$error_message"
         return 1
     fi
+
     return 0
 }
 
@@ -92,6 +95,7 @@ function validate_data_type {
             return 1
             ;;
     esac
+
     return 0
 }
 
@@ -112,7 +116,7 @@ function validate_new_and_stored_data_are_unique {
     ' "$table_data_path"
 
     if [[ $? -ne 0 ]]; then
-        echo_red "Error: There are duplicate values violate unique constraint"
+        echo_red "Error: There are duplicate values violate unique constraint."
         return 1
     fi
 
@@ -138,7 +142,7 @@ function validate_new_data_is_not_null {
     local new_value=$1
 
     if [[ -z "$new_value" ]]; then
-        echo_red "Error: Empty value violates not null constraint"
+        echo_red "Error: Empty value violates not null constraint."
         return 1
     fi
 

@@ -22,7 +22,7 @@ matched_rows=$(ask_for_condition "all" "update" "$query")
 matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
 if [[ "$matched_rows_length" -eq 0 ]]; then
-    echo_red "Error: There is no matched records to update"
+    echo_red "Error: There is no matched records to update."
     exit 1
 fi
 
@@ -66,7 +66,7 @@ while true; do
                     unique_constraint=$(cut -d: -f2 <<< "${constraints[$col_index]}")
 
                     if [[ $unique_constraint = "unique" && $matched_rows_length -gt 1 ]]; then
-                        echo_red "Error: There is a unique constraint. you can't update multiple records with the same value"
+                        echo_red "Error: There is a unique constraint. you can't update multiple records with the same value."
                         break
                     fi
 

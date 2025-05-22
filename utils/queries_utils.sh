@@ -162,7 +162,7 @@ function get_matched_rows {
                 }                            
             }
         }
-    }' $table_data_path)
+    }' "$table_data_path")
 
     echo "${matched_rows[@]}" 
     return 0
@@ -171,7 +171,6 @@ function get_matched_rows {
 function delete_matched_rows {
     local value=$1
     local operator=$2
-
 
     awk -F : -v condition_col_num="$condition_col_num" -v value="$value" -v operator="$operator" '
     {
@@ -206,10 +205,10 @@ function ask_for_condition {
         select option in "Add condition" "No condition"; do
             case $option in
                 "Add condition")
-                    read col_name condition_col_num col_data_type col_constraints <<< $(select_from_columns "make condition on" "${table_metadata_path}")
+                    read col_name condition_col_num col_data_type col_constraints <<< $(select_from_columns "make condition on" "$table_metadata_path")
 
 
-                    if [[ $col_data_type = "integer" ]]; then
+                    if [[ "$col_data_type" = "integer" ]]; then
                         while true; do
                             echo > /dev/stderr
                             echo "Choose comparison arithmetic operator" > /dev/stderr
@@ -261,6 +260,7 @@ function ask_for_condition {
                             done
                         done
                     else 
+                        # Any data type except integer
                         while true; do
                             echo > /dev/stderr
                             echo "Select comparison operator" > /dev/stderr
@@ -458,6 +458,7 @@ function print_table {
         fi
 
         print_row "$row" "${columns_lengths[@]}"
+
     done <<< "$table_content"
 
     print_horizontal_separator BOTTOM "${columns_lengths[@]}" 
@@ -467,7 +468,7 @@ function print_table {
 function auto_increment_pk {
     local table_data_path=$1
 
-    max=$(awk -F : '{if($1 > max) max=$1} END{print max}' $table_data_path)
+    max=$(awk -F : '{if($1 > max) max=$1} END{print max}' "$table_data_path")
 
     echo $(($max + 1)) 
 }

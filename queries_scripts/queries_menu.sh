@@ -14,7 +14,7 @@ PS3="${table_name}_table >> "
 
 while true; do
     echo
-    echo "============== Queries Menu $table_name =============="
+    echo "═══════════ Queries Menu $table_name ═══════════"
     select choice in "Select" "Insert" "Update" "Delete" "Back To Tables Menu"
     do
         case $choice in
