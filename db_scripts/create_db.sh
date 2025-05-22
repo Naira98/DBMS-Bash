@@ -13,7 +13,7 @@ while true; do
     error_message="Error: Database '$db_name' already exists."
     validate_dir_does_not_exist "$db_path" "$error_message"  || continue
 
-    mkdir -p "$db_path"
+    mkdir "$db_path"
     echo_green "Database '$db_name' created successfully."
     break
 done

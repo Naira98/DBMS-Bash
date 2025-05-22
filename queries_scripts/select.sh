@@ -18,7 +18,7 @@ while true; do
                 matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
                 if [[ "$matched_rows_length" -eq 0 ]]; then
-                    echo_red "Error: There is no matched records to select"
+                    echo_red "Error: There is no matched records to select."
                     exit 1
                 fi
                 
@@ -46,10 +46,9 @@ while true; do
                 matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
                 if [[ "$matched_rows_length" -eq 0 ]]; then
-                    echo_red "Error: There is no matched records to select"
+                    echo_red "Error: There is no matched records to select."
                     exit 1
                 fi
-
 
                 headers=$(get_table_headers "${chosen_cols_nums}")
                 content=$(echo -e "$headers\n$matched_rows")

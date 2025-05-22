@@ -7,7 +7,7 @@ source ./utils/output_utils.sh
 read col_name col_num col_data_type col_constraints <<< $(select_from_columns "drop" "${table_metadata_path}")
 
 if [[ $col_num = 1 ]]; then
-    echo_red "Error: Primary key column '$col_name' can't be deleted"
+    echo_red "Error: Primary key column '$col_name' can't be deleted."
     exit 1
 fi
 

@@ -3,10 +3,10 @@ source ./utils/output_utils.sh
 
 tables_path="./$WORK_SPACE/$CONNECTED_DB"
 
-tables=$(ls $tables_path)
+tables=$(ls "$tables_path")
 
 echo
-if [[ -z $tables ]]; then
+if [[ -z "$tables" ]]; then
     echo "================= Tables ================="
     echo "No tables found in '$CONNECTED_DB' database"
     echo "=========================================="
@@ -14,7 +14,7 @@ if [[ -z $tables ]]; then
 
 else
     echo "================= Tables ================="
-    for table in $tables; do
+    for table in "$tables"; do
         echo " - $table"
     done
     echo "=========================================="

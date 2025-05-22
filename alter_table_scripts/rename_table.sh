@@ -18,10 +18,6 @@ while true; do
     mv "$table_data_path" "$new_table_data_path"
     mv "$table_metadata_path" "$new_table_metadata_path"
 
-    table_name="$new_name"
-    table_data_path="$new_table_data_path"
-    table_metadata_path="$new_table_metadata_path"
-
     echo_green "Table renamed successfully to '$new_name'."
     break
 done

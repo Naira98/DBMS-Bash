@@ -9,7 +9,7 @@ function confirm_exit {
     read -rp "Do you really want to exit? (y/n): " confirm
 
     if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
-        echo_blue "Exiting... Goodbye!"
+        echo_green "Exiting... Goodbye!"
         echo > /dev/stderr
         exit $exit_status
     fi
