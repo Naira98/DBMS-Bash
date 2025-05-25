@@ -7,6 +7,7 @@ export table_data_path="./$WORK_SPACE/$CONNECTED_DB/$table_name"
 export table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
 
 if [[ -z "$table_name" ]]; then
+    echo_red "Error:"
     exit 1
 fi
 
