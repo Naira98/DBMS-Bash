@@ -3,9 +3,9 @@ set -e
 source ./utils/selection_utils.sh
 source ./utils/table_utils.sh
 
-read col_name col_num col_data_type col_constraints <<< "$(select_from_columns "add or drop constraints from" "${table_metadata_path}")"
+read col_name col_num col_data_type col_constraints <<< "$(select_from_columns "add or drop constraints from" "${TABLE_METADATA_PATH}")"
 
-new_constraints=$(ask_for_all_constraints "$col_name" "$col_data_type" "$col_constraints" "$table_data_path" "$col_num")
+new_constraints=$(ask_for_all_constraints "$col_name" "$col_data_type" "$col_constraints" "$TABLE_DATA_PATH" "$col_num")
 
 awk -F: -v col_num="$col_num" -v new_constraints="$new_constraints" '
 BEGIN { OFS = ":" }
@@ -18,6 +18,6 @@ BEGIN { OFS = ":" }
         print $0
     }
 }
-' "$table_metadata_path" > "${table_metadata_path}.tmp" && mv "${table_metadata_path}.tmp" "$table_metadata_path"
+' "$TABLE_METADATA_PATH" > "${TABLE_METADATA_PATH}.tmp" && mv "${TABLE_METADATA_PATH}.tmp" "$TABLE_METADATA_PATH"
 
 echo_green "Column '$col_name' constraints altered successfully."

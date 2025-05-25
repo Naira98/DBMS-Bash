@@ -2,19 +2,21 @@
 source ./utils/output_utils.sh
 source ./utils/selection_utils.sh
 
-export table_name=$(select_from_tables "query on")
-export table_data_path="./$WORK_SPACE/$CONNECTED_DB/$table_name"
-export table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
+export TABLE_NAME=$(select_from_tables "query on")
+export TABLE_DATA_PATH="./$WORK_SPACE/$CONNECTED_DB/$TABLE_NAME"
+export TABLE_METADATA_PATH="./$WORK_SPACE/$CONNECTED_DB/.$TABLE_NAME"
 
-if [[ -z "$table_name" ]]; then
+if [[ -z "$TABLE_NAME" || ! -f "$TABLE_DATA_PATH" || ! -f "$TABLE_METADATA_PATH" ]]; then
+    echo_red "Error: Table files for '$TABLE_NAME' are missing."
+    echo_red "Exiting..."
     exit 1
 fi
 
-PS3="${table_name}_table >> "
+PS3="${TABLE_NAME}_table >> "
 
 while true; do
     echo
-    echo "═══════════ Queries Menu $table_name ═══════════"
+    echo "═══════════ Queries Menu $TABLE_NAME ═══════════"
     select choice in "Select" "Insert" "Update" "Delete" "Back To Tables Menu"
     do
         case $choice in

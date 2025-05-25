@@ -4,7 +4,7 @@ source ./utils/queries_utils.sh
 
 PS3="Choose an option: "
 
-query="SELECT col_names FROM $table_name WHERE condition"
+query="SELECT col_names FROM $TABLE_NAME WHERE condition"
 
 while true; do
     echo

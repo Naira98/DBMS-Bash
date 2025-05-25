@@ -11,13 +11,13 @@ while IFS=: read -r col type cons; do
     columns+=("$col")
     types+=("$type")
     constraints+=("${cons}")
-done < "$table_metadata_path"
+done < "$TABLE_METADATA_PATH"
 
 row=""
 
 while true; do
     echo
-    quote="INSERT INTO "$table_name" VALUES"
+    quote="INSERT INTO "$TABLE_NAME" VALUES"
     echo "$quote"
     printf '%*s\n' "${#quote}" '' | tr ' ' '-' > /dev/stderr
 
@@ -33,7 +33,7 @@ while true; do
                 if [[ -z "$input" ]]; then
                     # PK with auto increment
                     if [[ $i -eq 0 && "$default_value_or_auto_increment" = "auto_increment" ]]; then
-                        input=$(auto_increment_pk "$table_data_path")
+                        input=$(auto_increment_pk "$TABLE_DATA_PATH")
                     else
                     # Normal column with default value
                         input="$default_value_or_auto_increment"
@@ -44,7 +44,7 @@ while true; do
             not_null_constraint=$(cut -d: -f3 <<< "${constraints[$i]}")
             validate_data_type "${types[$i]}" "$not_null_constraint" "$input" || continue
 
-            validate_constraints "${constraints[$i]}" "$(($i+1))"  "${table_data_path}" "$input" || continue
+            validate_constraints "${constraints[$i]}" "$(($i+1))"  "${TABLE_DATA_PATH}" "$input" || continue
 
 
             if [[ $i -eq $((${#columns[@]} - 1)) ]]; then
@@ -58,7 +58,7 @@ while true; do
     done
 
     echo_green "(+1) record inserted successfully."
-    echo "$row" >> "$table_data_path"
+    echo "$row" >> "$TABLE_DATA_PATH"
 
     echo
     read -rp $'Do you want to insert more records? (y/n): ' confirm

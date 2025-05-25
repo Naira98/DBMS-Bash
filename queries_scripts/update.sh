@@ -14,10 +14,10 @@ while IFS=: read -r col type cons; do
     columns+=("$col")
     types+=("$type")
     constraints+=("${cons}")
-done < "$table_metadata_path"
+done < "$TABLE_METADATA_PATH"
 
 function ask_for_update_condition {
-    query="UPDATE $table_name WHERE condition"
+    query="UPDATE $TABLE_NAME WHERE condition"
     matched_rows=$(ask_for_condition "all" "update" "$query")
     matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
@@ -37,7 +37,7 @@ function ask_for_update_condition {
 ask_for_update_condition
 
 while true; do
-    quote="UPDATE $table_name SET columns"
+    quote="UPDATE $TABLE_NAME SET columns"
 
     echo
     echo "$quote"
@@ -77,7 +77,7 @@ while true; do
                     not_null_constraint=$(cut -d: -f3 <<< "${constraints[$col_index]}")
                     validate_data_type "${types[$col_index]}" "$not_null_constraint" "$new_value" || break
 
-                    validate_constraints "${constraints[$col_index]}" "$REPLY" "${table_data_path}" "$new_value" || break
+                    validate_constraints "${constraints[$col_index]}" "$REPLY" "${TABLE_DATA_PATH}" "$new_value" || break
 
                     updated_values=$(awk -F: -v new_value="$new_value" -v col_num="$REPLY" '
                     BEGIN {OFS=":"} {$col_num=new_value; print $0}' <<< "$updated_values")
@@ -118,7 +118,7 @@ while true; do
                         print $0
                     }
                 }
-                ' "$table_data_path" > "${table_data_path}.tmp" && mv "${table_data_path}.tmp" "$table_data_path"
+                ' "$TABLE_DATA_PATH" > "${TABLE_DATA_PATH}.tmp" && mv "${TABLE_DATA_PATH}.tmp" "$TABLE_DATA_PATH"
 
                 if [[ "$matched_rows_length" -gt 1 ]]; then
                     echo_green "(+$matched_rows_length) records updated successfully"

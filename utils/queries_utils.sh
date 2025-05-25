@@ -3,7 +3,7 @@ source ./utils/output_utils.sh
 source ./utils/selection_utils.sh
 
 function ask_for_some_columns {
-    local columns=($(awk -F: '{ print $1 }' "$table_metadata_path"))
+    local columns=($(awk -F: '{ print $1 }' "$TABLE_METADATA_PATH"))
     local chosen_column_nums=()
 
     while true; do
@@ -162,7 +162,7 @@ function get_matched_rows {
                 }                            
             }
         }
-    }' "$table_data_path")
+    }' "$TABLE_DATA_PATH")
 
     echo "${matched_rows[@]}" 
     return 0
@@ -186,7 +186,7 @@ function delete_matched_rows {
             print $0
         }
     }
-    ' "$table_data_path" > "${table_data_path}.tmp" && mv "${table_data_path}.tmp" "$table_data_path"
+    ' "$TABLE_DATA_PATH" > "${TABLE_DATA_PATH}.tmp" && mv "${TABLE_DATA_PATH}.tmp" "$TABLE_DATA_PATH"
 
     return 0
 }
@@ -205,7 +205,7 @@ function ask_for_condition {
         select option in "Add condition" "No condition"; do
             case $option in
                 "Add condition")
-                    read col_name condition_col_num col_data_type col_constraints <<< $(select_from_columns "make condition on" "$table_metadata_path")
+                    read col_name condition_col_num col_data_type col_constraints <<< $(select_from_columns "make condition on" "$TABLE_METADATA_PATH")
 
 
                     if [[ "$col_data_type" = "integer" ]]; then
@@ -304,7 +304,7 @@ function ask_for_condition {
 
                 "No condition")
                     if [[ "$reason" == "delete" ]]; then
-                        sed -i '1,$d' "$table_data_path"
+                        sed -i '1,$d' "$TABLE_DATA_PATH"
                         return 0
                     fi
 
@@ -329,7 +329,7 @@ function get_table_headers {
     local col_nums=$1
 
     if [[ $col_nums = "all" ]]; then
-        local headers=$(awk -F: 'BEGIN {ORS=":"} {print $1}' "$table_metadata_path" | sed 's/:$//')
+        local headers=$(awk -F: 'BEGIN {ORS=":"} {print $1}' "$TABLE_METADATA_PATH" | sed 's/:$//')
     else
         local headers=$(awk -F: -v col_nums="$col_nums" '
         BEGIN {ORS=":"} {
@@ -339,7 +339,7 @@ function get_table_headers {
                     print $1
                 }
             }
-        }' "$table_metadata_path" | sed 's/\:$//')
+        }' "$TABLE_METADATA_PATH" | sed 's/\:$//')
     fi
     echo "$headers"
 }
@@ -473,9 +473,7 @@ function print_table {
 
 
 function auto_increment_pk {
-    local table_data_path=$1
-
-    max=$(awk -F : '{if($1 > max) max=$1} END{print max}' "$table_data_path")
+    max=$(awk -F : '{if($1 > max) max=$1} END{print max}' "$TABLE_DATA_PATH")
 
     echo $(($max + 1)) 
 }
