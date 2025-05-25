@@ -16,21 +16,25 @@ while IFS=: read -r col type cons; do
     constraints+=("${cons}")
 done < "$table_metadata_path"
 
-query="UPDATE $table_name WHERE condition"
+function ask_for_update_condition {
+    query="UPDATE $table_name WHERE condition"
+    matched_rows=$(ask_for_condition "all" "update" "$query")
+    matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
 
-matched_rows=$(ask_for_condition "all" "update" "$query")
-matched_rows_length=$(awk -F" " '{if ($1 != "") count+=1} END {print count}' <<< "$matched_rows")
+    if [[ "$matched_rows_length" -eq 0 ]]; then
+        echo_red "Error: There is no matched records to update."
+        exit 1
+    fi
 
-if [[ "$matched_rows_length" -eq 0 ]]; then
-    echo_red "Error: There is no matched records to update."
-    exit 1
-fi
+    matched_ids=$(echo "$matched_rows" | cut -d: -f1 | tr '\n' ':' | sed "s/:$//")
 
-matched_ids=$(echo "$matched_rows" | cut -d: -f1 | tr '\n' ':' | sed "s/:$//")
+    updated_values=$(printf ':%.0s' $(seq 1 $((${#columns[@]} - 1))))  # ":::"
+    selected_values=$(printf '0:%.0s' $(seq 1 $((${#columns[@]} - 1))))
+    selected_values="${selected_values}0"    # "0:0:0:0"
+    return 0
+}
 
-updated_values=$(printf ':%.0s' $(seq 1 $((${#columns[@]} - 1))))  # ":::"
-selected_values=$(printf '0:%.0s' $(seq 1 $((${#columns[@]} - 1))))
-selected_values="${selected_values}0"    # "0:0:0:0"
+ask_for_update_condition
 
 while true; do
     quote="UPDATE $table_name SET columns"
@@ -122,7 +126,14 @@ while true; do
                     echo_green "(+1) record updated successfully"
                 fi
 
-                exit 0
+                echo
+                read -rp $'Do you want to update more records? (y/n): ' confirm
+
+                if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
+                    ask_for_update_condition
+                else
+                    exit 0
+                fi
                 ;;
 
             *)
