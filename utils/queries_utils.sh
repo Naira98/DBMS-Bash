@@ -364,7 +364,7 @@ function print_horizontal_separator() {
             echo -n $box_middle
         fi
 
-        print_horizontal_line $vertical_position $((${columns_lengths[$column]} + 4)) #extra 4 spaces
+        print_horizontal_line $vertical_position $((${columns_lengths[$column]} + 2)) #extra 2 spaces
     done
 
     echo $box_right
@@ -400,7 +400,17 @@ function print_row() {
             prefix=$BOX_VERTICAL
         fi
 
-        printf "$prefix %-$(( ${columns_lengths[$column]} + 2 ))s " "$cell_table_content"
+        if [[ "$is_first_row" = "true" ]]; then
+            ITALIC="\e[3m"
+            NO_ITALIC="\e[0m"
+
+            BOLD="\033[1m"
+            NORMAL="\033[0m"
+
+            printf "$prefix ${ITALIC}${BOLD}%-${columns_lengths[$column]}s${NORMAL}${NO_ITALIC} " "$cell_table_content"
+        else
+            printf "$prefix %-${columns_lengths[$column]}s " "$cell_table_content"
+        fi
     done
 
     echo "$BOX_DOUBLE_VERTICAL"
@@ -454,10 +464,10 @@ function print_table {
             print_horizontal_separator MIDDLE "${columns_lengths[@]}" 
         else
             print_horizontal_separator TOP "${columns_lengths[@]}" 
-            is_first_row=false
         fi
 
         print_row "$row" "${columns_lengths[@]}"
+        is_first_row=false
 
     done <<< "$table_content"
 
