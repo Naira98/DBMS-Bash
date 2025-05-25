@@ -132,6 +132,7 @@ function validate_stored_data_have_no_null_values {
     ' "$table_data_path"
 
     if [[ $? -ne 0 ]]; then
+        echo_red "Error: Invalid not null constraint. There are null values in column $col_name."
         return 1
     fi
 
