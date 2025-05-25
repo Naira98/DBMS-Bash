@@ -171,11 +171,7 @@ function ask_for_all_constraints {
                             else
 
                                 # Add or Drop contraints - Alter table
-                                function handle_error {
-                                    echo_red "Error: There are duplicate values in column $col_num."
-                                }
-
-                                validate_stored_data_are_unique "$col_num" "$table_data_path" || handle_error
+                                validate_new_and_stored_data_are_unique "$col_num" "$table_data_path" || break
                                 
                                 chosen_constraints=$(awk -F: '{$2="unique"; print $1":"$2":"$3":"$4}' <<< "$chosen_constraints")
                             fi
@@ -205,12 +201,8 @@ function ask_for_all_constraints {
                                     chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< "$chosen_constraints")
                                 fi
                             else
-
                                 # Alter table - Add or Drop contraints
-                                function handle_error {
-                                    echo_red "Error: Invalid not null constraint. There are duplicate values in column $col_name."
-                                }
-                                validate_stored_data_have_no_null_values "$col_num" "$table_data_path" || handle_error
+                                validate_stored_data_have_no_null_values "$col_num" "$table_data_path" || break
 
                                 chosen_constraints=$(awk -F: '{$3="not_null"; print $1":"$2":"$3":"$4}' <<< "$chosen_constraints")
                             fi
