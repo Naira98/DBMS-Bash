@@ -24,7 +24,7 @@ while true; do
     fi
 
     echo
-    read -rp $'Do you want to delete more values? (y/n): ' confirm
+    read -rp $'Do you want to delete more records? (y/n): ' confirm
 
     if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
         row=""
