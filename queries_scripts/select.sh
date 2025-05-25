@@ -28,7 +28,7 @@ while true; do
                 print_table "$content"
 
                 echo
-                read -rp $'Do you want to select more values? (y/n): ' confirm
+                read -rp $'Do you want to select more records? (y/n): ' confirm
 
                 if [[ "$confirm" =~ ^([Yy]|[Yy][Ee][Ss])$ || "$confirm" == "" ]]; then
                     row=""
