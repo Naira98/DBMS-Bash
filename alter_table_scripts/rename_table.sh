@@ -5,7 +5,7 @@ source ./utils/validation_utils.sh
 
 while true; do
     echo
-    read -rp "Enter the new name for '$table_name' table: " new_name
+    read -rp "Enter the new name for '$TABLE_NAME' table: " new_name
 
     new_name=$(validate_name "$new_name" "Table") || continue
 
@@ -15,8 +15,8 @@ while true; do
     error_message="Error: Table '$new_name' already exists."
     validate_file_does_not_exist "$new_table_data_path" "$error_message" || continue
 
-    mv "$table_data_path" "$new_table_data_path"
-    mv "$table_metadata_path" "$new_table_metadata_path"
+    mv "$TABLE_DATA_PATH" "$new_table_data_path"
+    mv "$TABLE_METADATA_PATH" "$new_table_metadata_path"
 
     echo_green "Table renamed successfully to '$new_name'."
     break

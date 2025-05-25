@@ -2,11 +2,13 @@
 source ./utils/selection_utils.sh
 source ./utils/output_utils.sh
 
-export table_name=$(select_from_tables "alter")
-export table_data_path="./$WORK_SPACE/$CONNECTED_DB/$table_name"
-export table_metadata_path="./$WORK_SPACE/$CONNECTED_DB/.$table_name"
+export TABLE_NAME=$(select_from_tables "alter")
+export TABLE_DATA_PATH="./$WORK_SPACE/$CONNECTED_DB/$TABLE_NAME"
+export TABLE_METADATA_PATH="./$WORK_SPACE/$CONNECTED_DB/.$TABLE_NAME"
 
-if [[ -z "$table_name" ]]; then
+if [[ -z "$TABLE_NAME" || ! -f "$TABLE_DATA_PATH" || ! -f "$TABLE_METADATA_PATH" ]]; then
+    echo_red "Error: Table files for '$TABLE_NAME' are missing."
+    echo_red "Exiting..."
     exit 1
 fi
 
@@ -14,7 +16,7 @@ PS3="Choose an option >> "
 
 while true; do
     echo
-    echo "═══════════ Alter Table $table_name ═══════════"
+    echo "═══════════ Alter Table $TABLE_NAME ═══════════"
     select option in "Rename Table" "Add Column" "Rename Column" "Drop Column" "Add Or Drop Constraint" "Back to Tables Menu"; do
         case $option in
             "Rename Table")

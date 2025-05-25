@@ -5,7 +5,9 @@ source ./utils/confirmation_utils.sh
 export CONNECTED_DB=$1
 PS3="${CONNECTED_DB}_db >> "
 
-if [[ -z "$CONNECTED_DB" ]]; then
+if [[ ! -d "./$WORK_SPACE/$CONNECTED_DB" ]]; then
+    echo_red "Error: Database '$CONNECTED_DB' does not exist."
+    echo_red "Exiting..."
     exit 1
 fi
 

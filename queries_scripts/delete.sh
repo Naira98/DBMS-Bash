@@ -4,14 +4,14 @@ source ./utils/queries_utils.sh
 
 PS3="Choose an option: "
 
-query="DELETE FROM $table_name WHERE condition"
+query="DELETE FROM $TABLE_NAME WHERE condition"
 
 while true; do
-    lines_count_before_deletion=$(wc -l < "$table_data_path")
+    lines_count_before_deletion=$(wc -l < "$TABLE_DATA_PATH")
 
     ask_for_condition "" "delete" "$query"
 
-    lines_count_after_deletion=$(wc -l < "$table_data_path")
+    lines_count_after_deletion=$(wc -l < "$TABLE_DATA_PATH")
 
     deleted_count=$(( "$lines_count_before_deletion" - "$lines_count_after_deletion" ))
  
