@@ -78,7 +78,7 @@ function validate_data_type {
                 return 1
             fi
             ;;
-        "string")
+        "varchar")
             if [[ "$input" =~ : || "$input" =~ $'\n' ]]; then
                 echo_red "Error: Value can't contain ':' or newlines."
                 return 1
