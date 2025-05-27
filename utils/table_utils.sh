@@ -82,9 +82,9 @@ function ask_for_data_type {
         echo > /dev/stderr
         echo "$quote" > /dev/stderr
         printf '%*s\n' "${#quote}" '' | tr ' ' '-' > /dev/stderr
-        select data_type in "integer" "string" "boolean"; do
+        select data_type in "integer" "varchar" "boolean"; do
             case $data_type in
-                integer|string|boolean)
+                integer|varchar|boolean)
                     echo $data_type
                     return 0
                     ;;
