@@ -50,9 +50,9 @@ function ask_for_col_name {
     while true; do
         if (( $col_num == 1 )); then
             echo > /dev/stderr
-            echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" > /dev/stderr
-            echo "┃ Make sure this column is the primary key ┃" > /dev/stderr
-            echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" > /dev/stderr
+            echo_bold "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" > /dev/stderr
+            echo_bold "┃ Make sure this column is the primary key ┃" > /dev/stderr
+            echo_bold "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" > /dev/stderr
         else
             echo > /dev/stderr
         fi

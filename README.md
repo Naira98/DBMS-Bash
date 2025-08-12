@@ -6,6 +6,13 @@ This CLI-based project simulates the core functionality of a DBMS, allowing you 
 
 ---
 
+## Demo Video
+
+Check out a quick demonstration of DBMS-Bash in action! This video will walk you through the core functionalities and show you how to interact with your databases and tables using the command line.
+
+
+---
+
 ## How to Use
 
 ```bash
@@ -16,7 +23,7 @@ git clone https://github.com/Naira98/DBMS-Bash.git
 cd DBMS-Bash
 
 # 3. Run the program
-./main.sh
+source ./main.sh
 ```
 ---
 
@@ -44,6 +51,23 @@ cd DBMS-Bash
 - `INSERT` new records into tables  
 - `UPDATE` existing records  
 - `DELETE` records based on conditions 
+
+
+---
+
+## How DBMS-Bash Uses the File System
+
+It directly uses the **Linux file system as its database storage mechanism**. Here's a more detailed breakdown:
+
+* **Databases as Directories:** Each database created in DBMS-Bash is represented as a dedicated **directory**. These database directories are stored within a specific data directory located in the **root directory of your DBMS-Bash project**.
+
+* **Tables as Files:** Inside each database directory, tables are managed using **two distinct files**:
+    * **Data File (`<table_name>`):** This file stores the actual records for your table.
+    * **Metadata File (`.<table_name>`):** This hidden file stores the table's schema, including column names, data types, and any constraints.
+
+* **Data Storage:** Records within tables are stored in a structured text format (custom delimited format) that Bash scripts can easily read from and write to.
+
+This ingenious approach allows you to simulate a DBMS without needing a traditional database server, relying entirely on shell commands for data manipulation and the robust Linux file system for persistence.
 
 ---
 

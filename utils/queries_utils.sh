@@ -401,10 +401,10 @@ function print_row() {
         fi
 
         if [[ "$is_first_row" = "true" ]]; then
-            ITALIC_BOLD="\033[1m\e[3m"
-            NO_ITALIC_NO_BOLD="\033[0m\e[0m"
+            BOLD="\033[1m"
+            NO_BOLD="\033[0m"
 
-            printf "$prefix ${ITALIC_BOLD}%-${columns_lengths[$column]}s${NO_ITALIC_NO_BOLD} " "$cell_table_content"
+            printf "$prefix ${BOLD}%-${columns_lengths[$column]}s${NO_BOLD} " "$cell_table_content"
         else
             printf "$prefix %-${columns_lengths[$column]}s " "$cell_table_content"
         fi
