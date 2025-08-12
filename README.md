@@ -11,6 +11,9 @@ This CLI-based project simulates the core functionality of a DBMS, allowing you 
 Check out a quick demonstration of DBMS-Bash in action! This video will walk you through the core functionalities and show you how to interact with your databases and tables using the command line.
 
 
+https://github.com/user-attachments/assets/87617869-ca9f-41de-a270-bf58bab7cbb3
+
+
 ---
 
 ## How to Use
